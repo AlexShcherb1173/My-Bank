@@ -1,9 +1,9 @@
-import masks
+import widget
 
-card_num_in = input()
+date_in = input()
 
-print(masks.get_mask_card_number(card_num_in))
+print(widget.get_date(date_in))
 
 acount_num_in = input()
 
-print(masks.get_mask_acount(acount_num_in))
+print(widget.mask_account_card(acount_num_in))
