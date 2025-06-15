@@ -5,7 +5,7 @@ def mask_account_card(card_account_number: str) -> str:
      маску номера карты или счета"""
     card_account_num = card_account_number.lower()
     substring = card_account_num[:4]
-    if substring == "cчет":
+    if substring == "счет":
          card_acc_num_mask = masks.get_mask_acount(card_account_num[5:])
     else:
          account_num = ""

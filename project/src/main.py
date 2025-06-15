@@ -1,8 +1,8 @@
 import widget
 
-date_in = input()
+#date_in = input()
 
-print(widget.get_date(date_in))
+#сprint(widget.get_date(date_in))
 
 acount_num_in = input()
 
