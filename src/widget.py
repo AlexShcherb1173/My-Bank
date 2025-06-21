@@ -16,6 +16,8 @@ def mask_account_card(card_account_number: str) -> str:
                 account_num += symbol
             elif symbol.isalpha():
                 prefics += symbol
+            elif symbol == " ":
+                prefics += symbol
 
         prefics_title = prefics.title()
         card_acc_num_mask = prefics_title + " " + masks.get_mask_card_number(account_num)
