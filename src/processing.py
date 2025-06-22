@@ -1,17 +1,21 @@
 import widget
 
 def filter_by_state(list_dict: list, state_in="EXECUTED") -> list:
-    list_dict_filer = []
+    """Функция принимает список словарей из 3х полей id, state, date и возвращает список
+       словарей-выборку по полю state"""
+    list_dict_filer_state = []
     for i in list_dict:
         if i["state"] == state_in:
-            list_dict_filer.append(i)
+            list_dict_filer_state.append(i)
 
-    return list_dict_filer
+    return list_dict_filer_state
 
 
-def sort_by_date(list_dict_date: list, reverse=True) -> list:
+def sort_by_date(list_dict: list, reverse=True) -> list:
+    """Функция принимает список словарей из 3х полей id, state, date и возвращает список
+       словарей сортированных по date(назад или вперед)"""
     if reverse:
-        list_dict_date_sort = sorted(list_dict_date, key=lambda id:id["date"], reverse=True)
+        list_dict_sort_by_date = sorted(list_dict, key=lambda id:id["date"], reverse=True)
     else:
-        list_dict_date_sort = sorted(list_dict_date, key=lambda id: id["date"], reverse=False)
-    return list_dict_date_sort
+        list_dict_sort_by_date = sorted(list_dict, key=lambda id: id["date"], reverse=False)
+    return list_dict_sort_by_date

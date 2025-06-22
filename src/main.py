@@ -16,6 +16,6 @@ a = [
     {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}
 ]
 
-#print(processing.sort_by_date(a, False))
+print(processing.sort_by_date(a))
 b = "CANCELED"
-print(processing.filter_by_state(a, b))
+print(processing.filter_by_state(a))
