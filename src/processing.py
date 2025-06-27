@@ -1,10 +1,10 @@
-def filter_by_state(list_dict: list[dict], state_in="EXECUTED") -> list[dict]:
+def filter_by_state(list_dict: list[dict], state_in: str = "EXECUTED") -> list[dict]:
     """Функция принимает список словарей из 3х полей id, state, date и возвращает список
     словарей-выборку по полю state"""
     list_dict_filer_state = []
-    for i in list_dict:
-        if i["state"] == state_in:
-            list_dict_filer_state.append(i)
+    for account in list_dict:
+        if account["state"] == state_in:
+            list_dict_filer_state.append(account)
     return list_dict_filer_state
 
 
