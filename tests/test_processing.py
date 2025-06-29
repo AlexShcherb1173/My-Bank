@@ -1,5 +1,5 @@
-def ask_account_card(card_account_number: str):
-    assert ask_account_card(card_account_number: str)
+ddef test_filter_by_state(list_dict: list[dict], state_in: str = "EXECUTED"):
+    assert filter_by_state(list_dict: list[dict], state_in: str = "EXECUTED")
 
-def get_date(date_time_in: str:
-    assert get_date(date_time_in: str
+def sort_by_date(list_dict: list[dict], reverse: bool = True):
+    assert sort_by_date(list_dict: list[dict], reverse: bool = True)
