@@ -1,8 +1,7 @@
 import masks
 
-
 def mask_account_card(card_account_number: str) -> str:
-    """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсвующей
+    """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
     маски номера карты или счета"""
     card_account_num = card_account_number.lower()
     substring = card_account_num[:4]
