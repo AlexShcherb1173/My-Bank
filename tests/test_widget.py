@@ -1,5 +1,5 @@
 import pytest
-import src\masks_
+import masks_
 import widget
 
 @pytest.mark.parametrize("str, exp_str", [
