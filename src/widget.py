@@ -1,4 +1,4 @@
-import masks_
+import src\masks_
 
 def mask_account_card(card_account_number: str) -> str:
     """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
