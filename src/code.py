@@ -17,5 +17,12 @@ a = [
 ]
 
 # print(processing.sort_by_date(a))
-b = "CANCELED"
-print(processing.filter_by_state(a, b))
+# b = "CANCELED"
+# print(processing.filter_by_state(a, b))
+
+print(processing.sort_by_date([
+            {'': 41428829, 'state': 'EXECUTED', 'date': ''},
+            {'': 939719570, 'state': 'EXECUTED', 'date': ''},
+            {'': 594226727, 'state': 'CANCELED', 'date': ''},
+            {'': 615064591, 'state': 'CANCELED', 'date': ''}
+        ]))
