@@ -1,7 +1,6 @@
 import pytest
-from src.widget import mask_account_card, get_date
-from masks_ import get_mask_card_number
-from masks_ import get_mask_acount
+import masks_
+import widget
 
 @pytest.mark.parametrize("str, exp_str", [
     ("Maestro1596837868705199", "Maestro 1596 83** **** 5199"),
