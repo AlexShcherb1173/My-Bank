@@ -3,11 +3,10 @@ import masks_
 def mask_account_card(card_account_number: str) -> str:
     """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
     маски номера карты или счета"""
-    #card_account_num = card_account_number.lower()
-    substring = card_account_num[:4]
+    substring = card_account_number[:4]
     substring = substring.lower()
     if substring == "счет":
-        card_acc_num_mask = "Счет " + masks_.get_mask_acount(card_account_num[5:])
+        card_acc_num_mask = "Счет " + masks_.get_mask_acount(card_account_number[5:])
     else:
         account_num = ""
         prefics = ""
@@ -19,8 +18,7 @@ def mask_account_card(card_account_number: str) -> str:
             elif symbol == " ":
                 prefics += symbol
 
-        prefics_title = prefics.title()
-        card_acc_num_mask = prefics_title + " " + masks_.get_mask_card_number(account_num)
+            card_acc_num_mask = prefics + masks_.get_mask_card_number(account_num)
     return card_acc_num_mask
 
 

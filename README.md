@@ -98,9 +98,21 @@ test_masks_.py::test_get_mask_acount[-**] PASSED                         [100%]
 
 Модуль mask_account_card
 
-
+test_widget.py::test_mask_account_card[Maestro1596837868705199-Maestro1596 83** **** 5199] PASSED [ 12%]
+test_widget.py::test_mask_account_card[\u0421\u0447\u0435\u0442 64686473678894779589-\u0421\u0447\u0435\u0442 **9589] PASSED [ 25%]
+test_widget.py::test_mask_account_card[MasterCard 7158300734726758-MasterCard 7158 30** **** 6758] PASSED [ 37%]
+test_widget.py::test_mask_account_card[\u0421\u0447\u0435\u044235383033474447895560-\u0421\u0447\u0435\u0442 **5560] PASSED [ 50%]
+test_widget.py::test_mask_account_card[VisaClassic6831982476737658-VisaClassic6831 98** **** 7658] PASSED [ 62%]
+test_widget.py::test_mask_account_card[Visa Platinum8990922113665229-Visa Platinum8990 92** **** 5229] PASSED [ 75%]
+test_widget.py::test_mask_account_card[VisaGold 5999414228426353-VisaGold 5999 41** **** 6353] PASSED [ 87%]
+test_widget.py::test_mask_account_card[\u0441\u0447\u0435\u0442  73654108430135874305-\u0421\u0447\u0435\u0442 **4305] PASSED [100%]
 
 Модуль get_date
+
+test_widget.py::test_get_date[2024-03-11T02:26:18.671407-11.03.2024] PASSED [ 25%]
+test_widget.py::test_get_date[2025-06-30T02:-30.06.2025] PASSED          [ 50%]
+test_widget.py::test_get_date[2025-07-01-01.07.2025] PASSED              [ 75%]
+test_widget.py::test_get_date[2021-01-01rkuryflfkhfglf-01.01.2021] PASSED [100%]
 
 
 

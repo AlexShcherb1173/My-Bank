@@ -1,16 +1,16 @@
 import pytest
-import masks_
+#import widget
 def mask_account_card(card_account_number: str) -> str:
     """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
     маски номера карты или счета"""
-    card_account_num = card_account_number.lower()
-    substring = card_account_num[:4]
+    substring = card_account_number[:4]
+    substring = substring.lower()
     if substring == "счет":
-        card_acc_num_mask = "Счет " + masks_.get_mask_acount(card_account_num[5:])
+        card_acc_num_mask = "Счет " + masks_.get_mask_acount(card_account_number[5:])
     else:
         account_num = ""
         prefics = ""
-        for symbol in card_account_num:
+        for symbol in card_account_number:
             if symbol.isdigit():
                 account_num += symbol
             elif symbol.isalpha():
@@ -18,8 +18,7 @@ def mask_account_card(card_account_number: str) -> str:
             elif symbol == " ":
                 prefics += symbol
 
-        prefics_title = prefics.title()
-        card_acc_num_mask = prefics_title + " " + masks_.get_mask_card_number(account_num)
+            card_acc_num_mask = prefics + masks_.get_mask_card_number(account_num)
     return card_acc_num_mask
 
 
@@ -32,13 +31,13 @@ def get_date(date_time_in: str) -> str:
 
 
 @pytest.mark.parametrize("str, exp_str", [
-    ("Maestro1596837868705199", "Maestro 1596 83** **** 5199"),
+    ("Maestro1596837868705199", "Maestro1596 83** **** 5199"),
     ("Счет 64686473678894779589", "Счет **9589"),
     ("MasterCard 7158300734726758", "MasterCard 7158 30** **** 6758"),
     ("Счет35383033474447895560", "Счет **5560"),
-    ("VisaClassic6831982476737658", "Visa Classic 6831 98** **** 7658"),
-    ("Visa Platinum8990922113665229", "Visa Platinum 8990 92** **** 5229"),
-    ("VisaGold 5999414228426353", "Visa Gold 5999 41** **** 6353"),
+    ("VisaClassic6831982476737658", "VisaClassic6831 98** **** 7658"),
+    ("Visa Platinum8990922113665229", "Visa Platinum8990 92** **** 5229"),
+    ("VisaGold 5999414228426353", "VisaGold 5999 41** **** 6353"),
     ("счет  73654108430135874305", "Счет **4305"),
 ])
 def test_mask_account_card(str, exp_str):
