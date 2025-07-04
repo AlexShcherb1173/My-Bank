@@ -1,6 +1,7 @@
 import pytest
 from src.widget import mask_account_card, get_date
-import masks
+from masks_ import get_mask_card_number
+from masks_ import get_mask_acount
 
 @pytest.mark.parametrize("str, exp_str", [
     ("Maestro1596837868705199", "Maestro 1596 83** **** 5199"),
@@ -20,7 +21,7 @@ def test_mask_account_card(str, exp_str):
     ("2025-06-30T02:", "30.06.2025"),
     ("2025-07-01", "01.07.2025"),
     ("2021-01-01rkuryflfkhfglf", "01.01.2021"),
-    ])
+])
 def test_get_date(str, exp_str):
     assert get_date(str) == exp_str
 

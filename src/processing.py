@@ -1,5 +1,3 @@
-import widget
-
 def filter_by_state(list_dict: list, state_in="EXECUTED") -> list:
     """Функция принимает список словарей из 3х полей id, state, date и возвращает список
        словарей-выборку по полю state"""
