@@ -1,5 +1,5 @@
 import widget
-import processing12345678
+import processing
 
 acount_num_in = input()
 

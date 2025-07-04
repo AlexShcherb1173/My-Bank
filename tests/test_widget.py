@@ -1,11 +1,40 @@
 import pytest
 import masks_
-import widget
+def mask_account_card(card_account_number: str) -> str:
+    """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
+    маски номера карты или счета"""
+    card_account_num = card_account_number.lower()
+    substring = card_account_num[:4]
+    if substring == "счет":
+        card_acc_num_mask = "Счет " + masks_.get_mask_acount(card_account_num[5:])
+    else:
+        account_num = ""
+        prefics = ""
+        for symbol in card_account_num:
+            if symbol.isdigit():
+                account_num += symbol
+            elif symbol.isalpha():
+                prefics += symbol
+            elif symbol == " ":
+                prefics += symbol
+
+        prefics_title = prefics.title()
+        card_acc_num_mask = prefics_title + " " + masks_.get_mask_card_number(account_num)
+    return card_acc_num_mask
+
+
+def get_date(date_time_in: str) -> str:
+    """Функция принимает строку установленного формата с датой и временем и вовращает строку даты
+    в формате дд.мм.гггг"""
+    date_form = ""
+    date_form = date_time_in[8:10] + "." + date_time_in[5:7] + "." + date_time_in[:4]
+    return date_form
+
 
 @pytest.mark.parametrize("str, exp_str", [
     ("Maestro1596837868705199", "Maestro 1596 83** **** 5199"),
     ("Счет 64686473678894779589", "Счет **9589"),
-    ("MasterCard 7158300734726758", "Master Card 7158 30** **** 6758"),
+    ("MasterCard 7158300734726758", "MasterCard 7158 30** **** 6758"),
     ("Счет35383033474447895560", "Счет **5560"),
     ("VisaClassic6831982476737658", "Visa Classic 6831 98** **** 7658"),
     ("Visa Platinum8990922113665229", "Visa Platinum 8990 92** **** 5229"),

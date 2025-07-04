@@ -3,14 +3,15 @@ import masks_
 def mask_account_card(card_account_number: str) -> str:
     """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
     маски номера карты или счета"""
-    card_account_num = card_account_number.lower()
+    #card_account_num = card_account_number.lower()
     substring = card_account_num[:4]
+    substring = substring.lower()
     if substring == "счет":
         card_acc_num_mask = "Счет " + masks_.get_mask_acount(card_account_num[5:])
     else:
         account_num = ""
         prefics = ""
-        for symbol in card_account_num:
+        for symbol in card_account_number:
             if symbol.isdigit():
                 account_num += symbol
             elif symbol.isalpha():
