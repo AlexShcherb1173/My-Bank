@@ -5,6 +5,7 @@ def filter_by_state(list_dict: list, state_in="EXECUTED") -> list:
     for i in list_dict:
         if i["state"] == state_in:
             list_dict_filter_state.append(i)
+            print(list_dict_filter_state)
 
     return list_dict_filter_state
 
