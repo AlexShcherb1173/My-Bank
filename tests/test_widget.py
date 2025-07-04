@@ -1,12 +1,37 @@
 import pytest
-#import widget
+def get_mask_card_number(card_num_in: str) -> str:
+    """Функция принимает строку с 16 цифрами номера карты и вовращает строку маску номера карты
+     по 4 цифры через пробел, с 6й по 12ю цифру замена на *"""
+    card_num_mask = ""
+    for i in range(len(card_num_in)):
+        if i > 5 and i < 12:
+            card_num_mask += "*"
+        else:
+            card_num_mask += card_num_in[i]
+    substring_1 = card_num_mask[:4]
+    substring_2 = card_num_mask[4:8]
+    substring_3 = card_num_mask[8:12]
+    substring_4 = card_num_mask[12:16]
+    card_num_mask = (
+        substring_1 + " " + substring_2 + " " + substring_3 + " " + substring_4
+    )
+    return card_num_mask
+
+
+def get_mask_acount(acount_num_in: str) -> str:
+    """Функция принимает строку с цифрами номера счета и вовращает строку маску номера счета
+         последние 4 цифры и две * перед ними"""
+    acount_num_mask = "**"
+    acount_num_mask += acount_num_in[-4:]
+    return acount_num_mask
+
 def mask_account_card(card_account_number: str) -> str:
     """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
     маски номера карты или счета"""
     substring = card_account_number[:4]
     substring = substring.lower()
     if substring == "счет":
-        card_acc_num_mask = "Счет " + masks_.get_mask_acount(card_account_number[5:])
+        card_acc_num_mask = "Счет " + get_mask_acount(card_account_number[5:])
     else:
         account_num = ""
         prefics = ""
@@ -18,7 +43,7 @@ def mask_account_card(card_account_number: str) -> str:
             elif symbol == " ":
                 prefics += symbol
 
-            card_acc_num_mask = prefics + masks_.get_mask_card_number(account_num)
+            card_acc_num_mask = prefics + get_mask_card_number(account_num)
     return card_acc_num_mask
 
 
@@ -52,11 +77,3 @@ def test_mask_account_card(str, exp_str):
 def test_get_date(str, exp_str):
     assert get_date(str) == exp_str
 
- #   Maestro1596837868705199
- #   Счет 64686473678894779589
- #   MasterCard 7158300734726758
- #   Счет35383033474447895560
- #   VisaClassic6831982476737658
- #    Visa Platinum8990922113665229
- #    VisaGold 5999414228426353
- #    Счет  73654108430135874305
