@@ -1,9 +1,6 @@
-# def sort_by_date(list_dict: list[dict], reverse: bool = True):
-#     assert sort_by_date(list_dict: list[dict], reverse: bool = True)
-
 import pytest
-import masks_
-import widget
+import processing
+
 
     # @pytest.mark.parametrize("list, exp_list",[
     #     [
@@ -56,11 +53,11 @@ import widget
     #     ],
     # ])
 
-    def test_filter_by_state(list_dict1):
-        assert filter_by_state(list_dict1) == [
+def test_filter_by_state(list_dict1):
+    assert filter_by_state(list_dict1) == [
              {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
              {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'}
-        [
+             ]
 
     # @pytest.mark.parametrize("str, exp_str", [
     #     ("2024-03-11T02:26:18.671407", "11.03.2024"),
