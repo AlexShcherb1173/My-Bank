@@ -1,12 +1,12 @@
 def filter_by_state(list_dict: list, state_in="EXECUTED") -> list:
     """Функция принимает список словарей из 3х полей id, state, date и возвращает список
        словарей-выборку по полю state"""
-    list_dict_filer_state = []
+    list_dict_filter_state = []
     for i in list_dict:
         if i["state"] == state_in:
-            list_dict_filer_state.append(i)
+            list_dict_filter_state.append(i)
 
-    return list_dict_filer_state
+    return list_dict_filter_state
 
 
 def sort_by_date(list_dict: list, reverse=True) -> list:
