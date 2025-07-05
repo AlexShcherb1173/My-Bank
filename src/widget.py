@@ -18,7 +18,6 @@ def mask_account_card(card_account_number: str) -> str:
                 prefics += symbol
             elif symbol == " ":
                 prefics += symbol
-
             card_acc_num_mask = prefics + masks_.get_mask_card_number(account_num)
     return card_acc_num_mask
 
