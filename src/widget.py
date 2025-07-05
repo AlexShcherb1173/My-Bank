@@ -1,5 +1,6 @@
 import masks_
 
+
 def mask_account_card(card_account_number: str) -> str:
     """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
     маски номера карты или счета"""
@@ -25,6 +26,5 @@ def mask_account_card(card_account_number: str) -> str:
 def get_date(date_time_in: str) -> str:
     """Функция принимает строку установленного формата с датой и временем и вовращает строку даты
     в формате дд.мм.гггг"""
-    date_form = ""
     date_form = date_time_in[8:10] + "." + date_time_in[5:7] + "." + date_time_in[:4]
     return date_form
