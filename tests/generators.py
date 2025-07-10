@@ -1,5 +1,5 @@
 import pytest
-from src.generators import filter_by_currency
+from generators import filter_by_currency
 from generators import transaction_descriptions
 from generators import card_number_generator
 # def filter_by_currency(transactions:list[dict], currency:str):
