@@ -1,89 +1,9 @@
-import widget
-import processing
+from typing import Iterable
 import generators
 
-import widget
-# import processing
-
-# acount_num_in = input()
-#
-# print(widget.mask_account_card(acount_num_in))
-#
-# date_in = input()
-# #
-# print(widget.get_date(date_in))
-
-# # a = [
-# #     {'id': 41428829, 'state': 'EXECUTED', '': '2019-07-03T18:35:29.512364'},
-# #             {'id': 939719570, 'state': 'EXECUTED', '': '2018-06-30T02:08:58.425572'},
-# #             {'id': 594226727, 'state': 'CANCELED', '': '2018-09-12T21:27:25.241689'},
-# #             {'id': 615064591, 'state': 'CANCELED', '': '2018-10-14T08:21:33.419441'}
-# # ]
-#
-# # print(processing.sort_by_date(a))
-# # b = "CANCELED"
-# # print(processing.filter_by_state(a, b))
-#
-# print(processing.sort_by_date([
-#             {'': 41428829, 'state': 'EXECUTED', 'date': ''},
-#             {'': 939719570, 'state': 'EXECUTED', 'date': ''},
-#             {'': 594226727, 'state': 'CANCELED', 'date': ''},
-#             {'': 615064591, 'state': 'CANCELED', 'date': ''}
-#         ]))
-# usd_transactions = filter_by_currency(transactions, "USD")
-# for _ in range(2):
-#     print(next(usd_transactions))
-#
-# >>> {
-#           "id": 939719570,
-#           "state": "EXECUTED",
-#           "date": "2018-06-30T02:08:58.425572",
-#           "operationAmount": {
-#               "amount": "9824.07",
-#               "currency": {
-#                   "name": "USD",
-#                   "code": "USD"
-#               }
-#           },
-#           "description": "Перевод организации",
-#           "from": "Счет 75106830613657916952",
-#           "to": "Счет 11776614605963066702"
-#       }
-#       {
-#               "id": 142264268,
-#               "state": "EXECUTED",
-#               "date": "2019-04-04T23:20:05.206878",
-#               "operationAmount": {
-#                   "amount": "79114.93",
-#                   "currency": {
-#                       "name": "USD",
-#                       "code": "USD"
-#                   }
-#               },
-#               "description": "Перевод со счета на счет",
-#               "from": "Счет 19708645243227258542",
-#               "to": "Счет 75651667383060284188"
-#        }
-#
-# descriptions = transaction_descriptions(transactions)
-# for _ in range(5):
-#     print(next(descriptions))
-#
-# >>> Перевод организации
-#     Перевод со счета на счет
-#     Перевод со счета на счет
-#     Перевод с карты на карту
-#     Перевод организации
 
 for card_number in generators.card_number_generator(9999999999999990, 9999999999999999):
     print(card_number)
-
-# >>> 0000 0000 0000 0001
-#     0000 0000 0000 0002
-#     0000 0000 0000 0003
-#     0000 0000 0000 0004
-#     0000 0000 0000 0005
-
 
 transactions = (
     [
@@ -94,8 +14,8 @@ transactions = (
             "operationAmount": {
                 "amount": "9824.07",
                 "currency": {
-                    "name": "USD",
-                    "code": "USD"
+                    "name": "",
+                    "code": ""
                 }
             },
             "description": "Перевод организации",
@@ -109,8 +29,8 @@ transactions = (
             "operationAmount": {
                 "amount": "79114.93",
                 "currency": {
-                    "name": "USD",
-                    "code": "USD"
+                    "name": "",
+                    "code": ""
                 }
             },
             "description": "Перевод со счета на счет",
@@ -139,11 +59,11 @@ transactions = (
             "operationAmount": {
                 "amount": "56883.54",
                 "currency": {
-                    "name": "USD",
-                    "code": "USD"
+                    "name": "",
+                    "code": ""
                 }
             },
-            "description": "Перевод с карты на карту",
+            "description": "Перевод организации",
             "from": "Visa Classic 6831982476737658",
             "to": "Visa Platinum 8990922113665229"
         },
@@ -164,3 +84,10 @@ transactions = (
         }
     ]
 )
+usd_transactions = generators.filter_by_currency(transactions, "RUB")
+for transaction in usd_transactions:
+    print(transaction)
+
+descriptions = generators.transaction_descriptions(transactions)
+for _ in range(5):
+   print(next(descriptions))

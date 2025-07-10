@@ -70,6 +70,71 @@
     {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},  
     {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'}
   ]_  
+## **_Пакет generators_**  
+- filter_by_currency(transactions:list[dict], currency:str): -> Iterable:  
+     функция, которая принимает на вход список словарей, представляющих транзакции возвращает итератор,  
+     который поочередно выдает транзакции, где валюта операции соответствует заданной (например, USD). 
+_Примеры работы:_
+usd_transactions = filter_by_currency(transactions, "USD")  
+for _ in range(2):  
+    print(next(usd_transactions))  
+
+    {"id": 939719570,  
+          "state": "EXECUTED",  
+          "date": "2018-06-30T02:08:58.425572",  
+          "operationAmount": {  
+              "amount": "9824.07",  
+              "currency": {  
+                  "name": "USD",  
+                  "code": "USD"  
+              }  
+          },  
+          "description": "Перевод организации",  
+          "from": "Счет 75106830613657916952",  
+          "to": "Счет 11776614605963066702"  
+      }  
+      {  
+              "id": 142264268,  
+              "state": "EXECUTED",  
+              "date": "2019-04-04T23:20:05.206878",  
+              "operationAmount": {  
+                  "amount": "79114.93",  
+                  "currency": {  
+                      "name": "USD",  
+                      "code": "USD"  
+                  }  
+              },  
+              "description": "Перевод со счета на счет",  
+              "from": "Счет 19708645243227258542",  
+              "to": "Счет 75651667383060284188"  
+}
+- transaction_descriptions(transaction_des: list[dict]) -> Iterable:  
+    Генератор принимает список словарей с транзакциями и возвращает описание каждой операции по очереди  
+_Пример работы:_  
+descriptions = transaction_descriptions(transactions)  
+for _ in range(5):  
+    print(next(descriptions))  
+
+    Перевод организации
+    Перевод со счета на счет
+    Перевод со счета на счет
+    Перевод с карты на карту
+    Перевод организации
+ 
+- card_number_generator(start: str = '1', stop: str = '9999999999999999') -> str:  
+     Функция принимает начальное и конечное значения для генерации диапазона номеров и
+     генерирует номера банковских карт в формате номера карт в заданном диапазоне
+     от 0000 0000 0000 0001 до 9999 9999 9999 9999.  
+_Примеры работы:_  
+for card_number in card_number_generator(1, 5):  
+    print(card_number)
+
+   0000 0000 0000 0001  
+   0000 0000 0000 0002  
+   0000 0000 0000 0003  
+   0000 0000 0000 0004  
+   0000 0000 0000 0005  
+
 
 Проверка входящих аргументов функций будет реализована отдельной функцией при сборке проекта,
 согласно принципам структурированного программирования
@@ -121,6 +186,37 @@ test_widget.py::test_get_date[2021-01-01rkuryflfkhfglf-01.01.2021] PASSED [100%]
 Модуль sort_by_date
 при поступлении некорректных данных, отсутствия соответствующих полей,  
 вызывается ошибка KeyError
+
+Модуль filter_by_currency(transactions, "RUB")
+
+{'id': 873106923, 'state': 'EXECUTED', 'date': '2019-03-23T01:09:46.296404', 'operationAmount': 
+       {'amount': '43318.34', 'currency': 
+             {'name': 'руб.', 'code': 'RUB'}}, 
+   'description': 'Перевод со счета на счет', 'from': 'Счет 44812258784861134719', 
+   'to': 'Счет 74489636417521191160'}
+{'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689', 'operationAmount': 
+       {'amount': '67314.70', 'currency': 
+             {'name': 'руб.', 'code': 'RUB'}}, 
+   'description': 'Перевод организации', 'from': 'Visa Platinum 1246377376343588', 
+   'to': 'Счет 14211924144426031657'}  
+При отсутствии искомого типа валюты или пустом списке ошибки не возникает.
+
+Модуль transaction_descriptions
+
+Перевод организации
+Перевод со счета на счет
+Перевод со счета на счет
+Перевод организации
+Перевод организации
+При отсутствии соответствующего поля возвращается None
+
+Модуль card_number_generators
+
+test_generators.py::test_card_number_generator[1, 1, 0000 0000 0000 0001] PASSED [ 20%]
+test_generators.py::test_card_number_generator[1111111111111111, 1111111111111111, 1111 1111 1111 1111] PASSED [ 40%]
+test_generators.py::test_card_number_generator[9999999999999999, 9999999999999999, 9999 9999 9999 9999] PASSED [ 60%]
+test_generators.py::test_card_number_generator[1111222233334444, 1111222233334444, 1111 2222 3333 4444] PASSED [ 80%]
+test_generators.py::test_card_number_generator[123456789012345, 123456789012345, 0123 4567 8901 2345] PASSED [100%]
 
 ## Установка:
 
