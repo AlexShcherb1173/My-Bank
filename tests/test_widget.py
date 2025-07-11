@@ -1,5 +1,4 @@
 import pytest
-import masks_
 
 
 @pytest.mark.parametrize(
@@ -16,7 +15,7 @@ import masks_
     ],
 )
 def test_mask_account_card(str, exp_str):
-    assert masks_.mask_account_card(str) == exp_str
+    assert mask_account_card(str) == exp_str
 
 
 @pytest.mark.parametrize(
@@ -29,4 +28,4 @@ def test_mask_account_card(str, exp_str):
     ],
 )
 def test_get_date(str, exp_str):
-    assert masks_.get_date(str) == exp_str
+    assert get_date(str) == exp_str

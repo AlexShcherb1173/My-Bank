@@ -1,6 +1,6 @@
 from typing import Iterable
-import generators
 
+import generators
 
 for card_number in generators.card_number_generator(9999999999999990, 9999999999999999):
     print(card_number)

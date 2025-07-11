@@ -1,7 +1,8 @@
+from typing import Any
 import masks_
 
 
-def mask_account_card(card_account_number: str) -> str:
+def mask_account_card(card_account_number: str) -> Any:
     """Функция принимает строку с названием и номером карты или счета и возвращает строку соответсnвующей
     маски номера карты или счета"""
     substring = card_account_number[:4]
