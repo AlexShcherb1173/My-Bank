@@ -1,6 +1,32 @@
 import pytest
-import generators
+from src.generators import *
 
+# from typing import Iterable
+#
+#
+# def filter_by_currency(transactions: list[dict], currency: str) -> Iterable:
+#     """функция, которая принимает на вход список словарей, представляющих транзакции возвращает итератор,
+#     который поочередно выдает транзакции, где валюта операции соответствует заданной (например, USD)."""
+#     for i in transactions:
+#         if i["operationAmount"]["currency"]["code"] == currency:
+#             yield i
+#
+#
+# def transaction_descriptions(transaction_des: list[dict]) -> Iterable:
+#     """Генератор принимает список словарей с транзакциями и возвращает описание каждой операции по очереди"""
+#     for transaction in transaction_des:
+#         yield transaction.get("description")
+#
+#
+# def card_number_generator(start: str = "1", stop: str = "9999999999999999") -> Iterable:
+#     """Функция, которая выдает номера банковских карт в формате XXXX XXXX XXXX XXXX. Может генерировать номера карт
+#     в заданном диапазоне от 0000 0000 0000 0001 до 9999 9999 9999 9999. Принимает начальное и конечное значения
+#     для генерации диапазона номеров."""
+#     for num in range(int(start), int(stop) + 1):
+#         yield "{:04d} {:04d} {:04d} {:04d}".format(
+#             num // 10**12, (num // 10**8) % 10**4, (num // 10**4) % 10**4, num % 10**4
+#         )
+#
 
 @pytest.mark.parametrize(
     "start, stop, exp_str",
@@ -13,11 +39,11 @@ import generators
     ],
 )
 def test_card_number_generator(start, stop, exp_str):
-    assert list(generators.card_number_generator(start, stop))[0] == exp_str
+    assert list(card_number_generator(start, stop))[0] == exp_str
 
 
 def test_filter_by_currency(transactions1):
-    usd_transactions = generators.filter_by_currency(transactions1, "USD")
+    usd_transactions = filter_by_currency(transactions1, "USD")
     assert list(usd_transactions)[0] == (
         {
             "id": 939719570,
@@ -32,7 +58,7 @@ def test_filter_by_currency(transactions1):
 
 
 def test_filter_by_currency(transactions2):
-    usd_transactions = generators.filter_by_currency(transactions2, "EUR")
+    usd_transactions = filter_by_currency(transactions2, "EUR")
     assert list(usd_transactions)[0] == (
         {
             "id": 142264268,
@@ -47,15 +73,15 @@ def test_filter_by_currency(transactions2):
 
 
 def test_transaction_descriptions(transactions1):
-    name_transactions = generators.transaction_descriptions(transactions1)
+    name_transactions = transaction_descriptions(transactions1)
     assert list(name_transactions)[0] == "Перевод организации"
 
 
 def test_transaction_descriptions(transactions2):
-    name_transactions = generators.transaction_descriptions(transactions2)
+    name_transactions = transaction_descriptions(transactions2)
     assert list(name_transactions)[2] == "Перевод со счета на счет"
 
 
 def test_transaction_descriptions(transactions3):
-    name_transactions = generators.transaction_descriptions(transactions3)
+    name_transactions = transaction_descriptions(transactions3)
     assert list(name_transactions)[0] == "Перевод с карты на карту"

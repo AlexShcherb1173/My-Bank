@@ -1,5 +1,5 @@
 from typing import Any
-import masks_
+from src_old.masks_ import *
 
 
 def mask_account_card(card_account_number: str) -> Any:
@@ -8,7 +8,7 @@ def mask_account_card(card_account_number: str) -> Any:
     substring = card_account_number[:4]
     substring = substring.lower()
     if substring == "счет":
-        card_acc_num_mask = "Счет " + masks_.get_mask_acount(card_account_number[5:])
+        card_acc_num_mask = "Счет " + get_mask_acount(card_account_number[5:])
     else:
         account_num = ""
         prefics = ""
@@ -19,7 +19,7 @@ def mask_account_card(card_account_number: str) -> Any:
                 prefics += symbol
             elif symbol == " ":
                 prefics += symbol
-            card_acc_num_mask = prefics + masks_.get_mask_card_number(account_num)
+            card_acc_num_mask = prefics + get_mask_card_number(account_num)
     return card_acc_num_mask
 
 
