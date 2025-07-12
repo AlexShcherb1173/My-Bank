@@ -1,7 +1,7 @@
 mport pytest
 
-from src_old.widget import mask_account_card
-from src_old.widget import get_date
+from src.widget import mask_account_card
+from src.widget import get_date
 @pytest.mark.parametrize(
     "str, exp_str",
     [
