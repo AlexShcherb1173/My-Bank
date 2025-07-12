@@ -1,4 +1,4 @@
-mport pytest
+import pytest
 
 from src.widget import mask_account_card
 from src.widget import get_date
