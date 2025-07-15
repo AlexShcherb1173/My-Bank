@@ -1,8 +1,24 @@
-import traceback
 import os
 import pytest
-from decorators import *
+from src.decorators import *
 
+LOG_FILE = "test_log.txt"
+
+@log()
+def add(a, b):
+    return a + b
+
+@log()
+def fail_func(a, b):
+    return a / b  # Возможна ZeroDivisionError
+
+@log(filename=LOG_FILE)
+def multiply(x, y):
+    return x * y
+
+@log(filename=LOG_FILE)
+def crash(x):
+    raise ValueError("something went wrong")
 
 def test_add_console_log(capsys):
     result = add(3, 5)
