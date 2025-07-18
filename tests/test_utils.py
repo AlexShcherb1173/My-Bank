@@ -5,6 +5,7 @@ import os
 import json
 from src.utils import read_json_file
 
+
 class TestReadJsonFile(unittest.TestCase):
 
     def test_valid_json_list_of_dicts(self):
