@@ -1,5 +1,5 @@
 from typing import Any
-from src.masks_ import *
+from src_old.masks_ import *
 
 
 def mask_account_card(card_account_number: str) -> Any:

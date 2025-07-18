@@ -1,5 +1,5 @@
 import pytest
-from src.generators import *
+from src_old.generators import *
 
 
 @pytest.mark.parametrize(

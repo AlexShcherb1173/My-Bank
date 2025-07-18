@@ -1,6 +1,6 @@
 import os
 import pytest
-from src.decorators import *
+from src_old.decorators import *
 
 LOG_FILE = "test_log.txt"
 
