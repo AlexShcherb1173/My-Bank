@@ -2,6 +2,8 @@ import json
 import os
 
 def read_json_file(filepath):
+    """Функция принимает на вход путь до JSON-файла и возвращает список словарей с данными о финансовых транзакциях.
+       Если файл пустой, содержит не список или не найден, функция возвращает пустой список. """
     if not os.path.exists(filepath):
         return []
 
@@ -15,7 +17,3 @@ def read_json_file(filepath):
     except (json.JSONDecodeError, IOError):
         return []
 
-
-
-if __name__ == '__main__':
-    unittest.main()

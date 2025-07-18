@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch, mock_open
 import tempfile
 import os
 import json
@@ -56,3 +57,24 @@ class TestReadJsonFile(unittest.TestCase):
         result = read_json_file(f_path)
         self.assertEqual(result, [])
         os.remove(f_path)
+
+    @patch("builtins.open", new_callable=mock_open, read_data=json.dumps([
+        {"id": 1, "amount": 100},
+        {"id": 2, "amount": 200}
+    ]))
+    @patch("os.path.exists", return_value=True)
+    def test_read_valid_json(self, mock_exists, mock_file):
+        result = read_json_file("dummy_path.json")
+        self.assertEqual(len(result), 2)
+        self.assertEqual(result[0]["id"], 1)
+
+    @patch("builtins.open", new_callable=mock_open, read_data="not json")
+    @patch("os.path.exists", return_value=True)
+    def test_read_invalid_json(self, mock_exists, mock_file):
+        result = read_json_file("dummy_path.json")
+        self.assertEqual(result, [])
+
+    @patch("os.path.exists", return_value=False)
+    def test_file_not_exists(self, mock_exists):
+        result = read_json_file("missing.json")
+        self.assertEqual(result, [])
