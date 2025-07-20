@@ -1,14 +1,14 @@
-# masks_new.py
+# masks.py
 import os
 import logging
 
-# Создание логгера для модуля masks
+# Создание логгера для модуля mmasks
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 # Создание file handler
 os.chdir(r'C:\users\alex_\PycharmProjects\My-Bank')
-file_handler = logging.FileHandler(r'logs\masks_new.log', encoding='utf-8')
+file_handler = logging.FileHandler(r'logs\masks.log', encoding='utf-8')
 file_handler.setLevel(logging.DEBUG)
 
 # Formatter: время, модуль, уровень, сообщение

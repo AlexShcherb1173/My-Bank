@@ -37,7 +37,7 @@
 # transactions = read_json_file('operations.json')
 # print(transactions)
 
-from masks_new import get_mask_card_number, get_mask_acount
+from masks import get_mask_card_number, get_mask_acount
 
 print(get_mask_card_number("1234567812345678"))
 print(get_mask_acount("40817810099910004312"))
