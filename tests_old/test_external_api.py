@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from src.external_api import get_transaction_amount_rub
+from src_old.external_api import get_transaction_amount_rub
 
 
 class TestTransactionConversion(unittest.TestCase):
