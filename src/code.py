@@ -43,3 +43,7 @@ print(get_mask_card_number("1234567812345678"))
 print(get_mask_acount("40817810099910004312"))
 print(get_mask_card_number("abc"))           # вызовет ошибку
 print(get_mask_acount("12"))                 # вызовет ошибку
+
+if __name__ == "__main__":
+    data = read_json_file("transactions.json")
+    print(data)
