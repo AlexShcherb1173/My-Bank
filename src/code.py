@@ -37,13 +37,18 @@
 # transactions = read_json_file('operations.json')
 # print(transactions)
 
-from masks import get_mask_card_number, get_mask_acount
+# from masks import get_mask_card_number, get_mask_acount
+#
+# print(get_mask_card_number("1234567812345678"))
+# print(get_mask_acount("40817810099910004312"))
+# print(get_mask_card_number("abc"))           # вызовет ошибку
+# print(get_mask_acount("12"))                 # вызовет ошибку
 
-print(get_mask_card_number("1234567812345678"))
-print(get_mask_acount("40817810099910004312"))
-print(get_mask_card_number("abc"))           # вызовет ошибку
-print(get_mask_acount("12"))                 # вызовет ошибку
+import json
+import os
+import logging
+from utils_new import *
 
 if __name__ == "__main__":
-    data = read_json_file("transactions.json")
+    data = read_json_file(r"data\operations.json")
     print(data)
