@@ -44,8 +44,13 @@
 # print(get_mask_card_number("abc"))           # вызовет ошибку
 # print(get_mask_acount("12"))                 # вызовет ошибку
 
-from src_old.utils_new import *
+# from src_old.utils_new import *
+#
+# if __name__ == "__main__":
+#     data = read_json_file(r"data\operations.json")
+#     print(data)
 
-if __name__ == "__main__":
-    data = read_json_file(r"data\operations.json")
-    print(data)
+from src.reader import *
+print(read_transactions_from_excel(r'data\transactions_excel.xlsx'))
+print('\n')
+print(read_transactions_from_csv(r'data\transactions.csv'))
