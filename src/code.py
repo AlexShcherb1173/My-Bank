@@ -50,7 +50,23 @@
 #     data = read_json_file(r"data\operations.json")
 #     print(data)
 
-from src.freader import *
+from freader import *
+import os
+from deepdiff import DeepDiff
+
+os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
+print ('Excel')
 print(read_transactions_from_excel(r'data\transactions_excel.xlsx'))
 print('\n')
+print('csv')
 print(read_transactions_from_csv(r'data\transactions.csv'))
+print('\n')
+print(read_transactions_from_excel(r'data\transactions_excel.xlsx') == read_transactions_from_csv(r'data\transactions.csv'))
+list1 = read_transactions_from_excel(r'data\transactions_excel.xlsx')
+
+list2 = read_transactions_from_csv(r'data\transactions.csv')
+
+diff = DeepDiff(list1, list2, ignore_order=True)
+print(diff)
+
+#print(transform_transaction({'id;state;date;amount;currency_name;currency_code;from;to;description': '650703;EXECUTED;2023-09-05T11:30:32Z;16210;Sol;PEN;Счет 58803664561298323391;Счет 39745660563456619397;Перевод организации'}))

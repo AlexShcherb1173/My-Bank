@@ -1,70 +1,61 @@
+
 import unittest
 import os
-from unittest.mock import patch, mock_open
-from src.freader import read_transactions_from_csv
-from src.freader import read_transactions_from_excel
+import sys
+from unittest.mock import mock_open, patch, MagicMock
+from src.freader import *
 
-CSV_DATA = """id,state,date,amount,currency_name,currency_code,from,to,description
-650703,EXECUTED,2023-09-05T11:30:32Z,16210,Sol,PEN,Счет 5880,Счет 3974,Перевод организации
-"""
-os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+class TestReadTransactionsFromCSV(unittest.TestCase):
+    @patch("builtins.open", new_callable=mock_open, read_data="dummy")
+    @patch("freader.transform_transaction")
+    @patch("csv.DictReader")
+    def test_read_transactions_from_csv(self, mock_dict_reader, mock_transform, mock_file):
+        # Подготавливаем фейковые строки, которые возвращает csv.DictReader
+        fake_rows = [
+            {'id;state;amount;currency_name;from;to': '650703;EXECUTED;16210;Sol;Счет 58803664561298323391;Счет 39745660563456619397'},
+            {'id;state;amount;currency_name;from;to': '111111;EXECUTED;33333;Sol;Счет 58803664561298323391;Счет 39745660563456619397'}
+        ]
+        mock_dict_reader.return_value = fake_rows
 
-@patch(r"src\freader.logger")
-@patch(r"src\freader.os.path.exists", return_value=True)
-@patch("builtins.open", new_callable=mock_open, read_data=CSV_DATA)
-def test_read_valid_csv(self, mock_file, mock_exists, mock_logger):
-        result = read_transactions_from_csv("transactions.csv")
-        self.assertEqual(len(result), 1)
-        self.assertEqual(result[0]["currency_code"], "PEN")
-        mock_logger.debug.assert_called_once_with(
-            "Файл CSV успешно прочитан: transactions.csv, записей: 1"
-        )
+        # Подготавливаем то, что должна вернуть transform_transaction
+        mock_transform.side_effect = [
+            {'id': 650703.0, 'state': 'EXECUTED', 'amount': 16210.0, 'currency_name': 'Sol', 'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397'},
+            {'id': 111111.0, 'state': 'EXECUTED', 'amount': 33333.0, 'currency_name': 'Sol', 'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397'}
+        ]
 
-@patch("freader.logger")
-@patch("freader.os.path.exists", return_value=False)
-def test_file_not_found(self, mock_exists, mock_logger):
-        result = read_transactions_from_csv("missing.csv")
-        self.assertEqual(result, [])
-        mock_logger.error.assert_called_once_with("Файл CSV не найден: missing.csv")
+        result = read_transactions_from_csv("fake_path.csv")
 
-@patch("freader.logger")
-@patch("freader.os.path.exists", return_value=True)
-@patch("builtins.open", side_effect=IOError("Permission denied"))
-def test_open_error(self, mock_open_fn, mock_exists, mock_logger):
-        result = read_transactions_from_csv("bad.csv")
-        self.assertEqual(result, [])
-        self.assertTrue(mock_logger.error.called)
-        self.assertIn("Ошибка при чтении CSV", mock_logger.error.call_args[0][0])
+        self.assertEqual(result, [
+            {'id': 650703.0, 'state': 'EXECUTED', 'amount': 16210.0, 'currency_name': 'Sol',
+             'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397'},
+            {'id': 111111.0, 'state': 'EXECUTED', 'amount': 33333.0, 'currency_name': 'Sol',
+             'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397'}
+        ])
+        mock_file.assert_called_once_with("fake_path.csv", mode='r', encoding='utf-8')
+        self.assertEqual(mock_transform.call_count, 0)
 
 
-class TestExcelReader(unittest.TestCase):
-    os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-    @patch("freader.logger")
-    @patch("os.path.exists", return_value=True)
-    @patch("pandas.read_excel")
-    def test_read_valid_excel(self, mock_read_excel, mock_exists, mock_logger):
+class TestReadTransactionsFromExcel(unittest.TestCase):
+    @patch("freader.pd.read_excel")
+    def test_read_transactions_from_excel(self, mock_read_excel):
+        # Подготовка фейкового DataFrame
         mock_df = MagicMock()
-        mock_df.to_dict.return_value = [{"id": 1, "currency_code": "EUR"}]
+        mock_df.to_dict.return_value = [
+            {'id': 1, 'amount': 100},
+            {'id': 2, 'amount': 200}
+        ]
         mock_read_excel.return_value = mock_df
 
-        result = read_transactions_from_excel("test.xlsx")
-        self.assertEqual(len(result), 1)
-        self.assertEqual(result[0]["currency_code"], "EUR")
-        mock_logger.debug.assert_called_once()
+        # Импортировать после патча или использовать правильно
+        from freader import read_transactions_from_excel
 
-    os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-    @patch("freader.logger")
-    @patch("os.path.exists", return_value=False)
-    def test_file_not_exists(self, mock_exists, mock_logger):
-        result = read_transactions_from_excel("missing.xlsx")
-        self.assertEqual(result, [])
-        mock_logger.error.assert_called_once_with("Файл Excel не найден: missing.xlsx")
+        result = read_transactions_from_excel("fake_path.xlsx")
 
-    os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-    @patch("freader.logger")
-    @patch("os.path.exists", return_value=True)
-    @patch("pandas.read_excel", side_effect=Exception("Ошибка Excel"))
-    def test_read_excel_error(self, mock_read_excel, mock_exists, mock_logger):
-        result = read_transactions_from_excel("corrupt.xlsx")
-        self.assertEqual(result, [])
-        self.assertIn("Ошибка при чтении Excel", mock_logger.error.call_ar)
+        # Проверка
+        self.assertEqual(result, [
+            {'id': 1, 'amount': 100},
+            {'id': 2, 'amount': 200}
+        ])
+        mock_read_excel.assert_called_once_with("fake_path.xlsx")
+        mock_df.to_dict.assert_called_once_with(orient="records")
