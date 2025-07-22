@@ -50,7 +50,7 @@
 #     data = read_json_file(r"data\operations.json")
 #     print(data)
 
-from src.reader import *
+from src.freader import *
 print(read_transactions_from_excel(r'data\transactions_excel.xlsx'))
 print('\n')
 print(read_transactions_from_csv(r'data\transactions.csv'))

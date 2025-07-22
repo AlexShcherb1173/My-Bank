@@ -1,16 +1,16 @@
 import unittest
 import os
 from unittest.mock import patch, mock_open
-from src.reader import read_transactions_from_csv
-from src.reader import read_transactions_from_excel
+from src.freader import read_transactions_from_csv
+from src.freader import read_transactions_from_excel
 
 CSV_DATA = """id,state,date,amount,currency_name,currency_code,from,to,description
 650703,EXECUTED,2023-09-05T11:30:32Z,16210,Sol,PEN,Счет 5880,Счет 3974,Перевод организации
 """
 os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
 
-@patch(r"src\reader.logger")
-@patch(r"src\reader.os.path.exists", return_value=True)
+@patch(r"src\freader.logger")
+@patch(r"src\freader.os.path.exists", return_value=True)
 @patch("builtins.open", new_callable=mock_open, read_data=CSV_DATA)
 def test_read_valid_csv(self, mock_file, mock_exists, mock_logger):
         result = read_transactions_from_csv("transactions.csv")
@@ -20,15 +20,15 @@ def test_read_valid_csv(self, mock_file, mock_exists, mock_logger):
             "Файл CSV успешно прочитан: transactions.csv, записей: 1"
         )
 
-@patch("reader.logger")
-@patch("reader.os.path.exists", return_value=False)
+@patch("freader.logger")
+@patch("freader.os.path.exists", return_value=False)
 def test_file_not_found(self, mock_exists, mock_logger):
         result = read_transactions_from_csv("missing.csv")
         self.assertEqual(result, [])
         mock_logger.error.assert_called_once_with("Файл CSV не найден: missing.csv")
 
-@patch("reader.logger")
-@patch("reader.os.path.exists", return_value=True)
+@patch("freader.logger")
+@patch("freader.os.path.exists", return_value=True)
 @patch("builtins.open", side_effect=IOError("Permission denied"))
 def test_open_error(self, mock_open_fn, mock_exists, mock_logger):
         result = read_transactions_from_csv("bad.csv")
@@ -39,7 +39,7 @@ def test_open_error(self, mock_open_fn, mock_exists, mock_logger):
 
 class TestExcelReader(unittest.TestCase):
     os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-    @patch("reader.logger")
+    @patch("freader.logger")
     @patch("os.path.exists", return_value=True)
     @patch("pandas.read_excel")
     def test_read_valid_excel(self, mock_read_excel, mock_exists, mock_logger):
@@ -53,7 +53,7 @@ class TestExcelReader(unittest.TestCase):
         mock_logger.debug.assert_called_once()
 
     os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-    @patch("reader.logger")
+    @patch("freader.logger")
     @patch("os.path.exists", return_value=False)
     def test_file_not_exists(self, mock_exists, mock_logger):
         result = read_transactions_from_excel("missing.xlsx")
@@ -61,7 +61,7 @@ class TestExcelReader(unittest.TestCase):
         mock_logger.error.assert_called_once_with("Файл Excel не найден: missing.xlsx")
 
     os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-    @patch("reader.logger")
+    @patch("freader.logger")
     @patch("os.path.exists", return_value=True)
     @patch("pandas.read_excel", side_effect=Exception("Ошибка Excel"))
     def test_read_excel_error(self, mock_read_excel, mock_exists, mock_logger):
