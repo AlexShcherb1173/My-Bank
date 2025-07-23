@@ -1,8 +1,8 @@
 import unittest
 import os
 from unittest.mock import patch, mock_open
-from src.freader import read_transactions_from_csv
-from src.freader import read_transactions_from_excel
+from src_old.freader import read_transactions_from_csv
+from src_old.freader import read_transactions_from_excel
 
 CSV_DATA = """id,state,date,amount,currency_name,currency_code,from,to,description
 650703,EXECUTED,2023-09-05T11:30:32Z,16210,Sol,PEN,Счет 5880,Счет 3974,Перевод организации

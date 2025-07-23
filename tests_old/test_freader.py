@@ -1,14 +1,13 @@
-
 import unittest
 import os
 import sys
 from unittest.mock import mock_open, patch, MagicMock
-os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-from src.freader import *
+os.chdir(r"/")
+from src_old.freader import *
 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
+os.chdir(r"/")
 class TestReadTransactionsFromCSV(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open, read_data="dummy")
     @patch("freader.transform_transaction")
@@ -38,7 +37,7 @@ class TestReadTransactionsFromCSV(unittest.TestCase):
         mock_file.assert_called_once_with("fake_path.csv", mode='r', encoding='utf-8')
         self.assertEqual(mock_transform.call_count, 0)
 
-os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
+os.chdir(r"/")
 class TestReadTransactionsFromExcel(unittest.TestCase):
     @patch("freader.pd.read_excel")
     def test_read_transactions_from_excel(self, mock_read_excel):
