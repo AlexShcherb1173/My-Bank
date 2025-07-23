@@ -75,7 +75,7 @@ sample_data = [
     },
 ]
 
-sample_data = [
+sample_data1 = [
     {
         "id": 1,
         "description": "Перевод организации"
@@ -94,34 +94,33 @@ sample_data = [
     }
 ]
 categories = ["Перевод с карты на карту", "Оплата услуг", "Снятие наличных"]
-Ожидаемый результат:
+# Ожидаемый результат:
+# {
+#     "Перевод с карты на карту": 2,
+#     "Оплата услуг": 1,
+#     "Снятие наличных": 0
+# }
 
-python
-Копировать
-Редактировать
-{
-    "Перевод с карты на карту": 2,
-    "Оплата услуг": 1,
-    "Снятие наличных": 0
-}
-
-from src_old.freader import *
+from operations import *
 import os
 from deepdiff import DeepDiff
 
+#print(process_bank_search(sample_data, ''))
+print(process_bank_operations(sample_data1, categories))
+
 os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-print ('Excel')
-print(read_transactions_from_excel(r'data\transactions_excel.xlsx'))
-print('\n')
-print('csv')
-print(read_transactions_from_csv(r'data\transactions.csv'))
-print('\n')
-print(read_transactions_from_excel(r'data\transactions_excel.xlsx') == read_transactions_from_csv(r'data\transactions.csv'))
-list1 = read_transactions_from_excel(r'data\transactions_excel.xlsx')
-
-list2 = read_transactions_from_csv(r'data\transactions.csv')
-
-diff = DeepDiff(list1, list2, ignore_order=True)
-print(diff)
+# print ('Excel')
+# print(read_transactions_from_excel(r'data\transactions_excel.xlsx'))
+# print('\n')
+# print('csv')
+# print(read_transactions_from_csv(r'data\transactions.csv'))
+# print('\n')
+# print(read_transactions_from_excel(r'data\transactions_excel.xlsx') == read_transactions_from_csv(r'data\transactions.csv'))
+# list1 = read_transactions_from_excel(r'data\transactions_excel.xlsx')
+#
+# list2 = read_transactions_from_csv(r'data\transactions.csv')
+#
+# diff = DeepDiff(list1, list2, ignore_order=True)
+# print(diff)
 
 #print(transform_transaction({'id;state;date;amount;currency_name;currency_code;from;to;description': '650703;EXECUTED;2023-09-05T11:30:32Z;16210;Sol;PEN;Счет 58803664561298323391;Счет 39745660563456619397;Перевод организации'}))
