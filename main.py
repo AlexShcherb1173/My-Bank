@@ -262,6 +262,28 @@ def process_bank_search(data: List[Dict], search: str) -> List[Dict]:
     pattern = re.compile(rf'\b{re.escape(search)}\b', re.IGNORECASE)
     return [entry for entry in data if pattern.search(entry.get("description", ""))]
 
+def format_transactions(transactions: List[Dict]) -> str:
+    '''функция преобразования списка словарей с транзакциями в читабельный текст'''
+    result = []
+    for tx in transactions:
+        date = tx.get("date", "")
+        description = tx.get("description", "")
+        sender = tx.get("from", "")
+        receiver = tx.get("to", "")
+        amount = tx.get("amount", 0)
+        currency = tx.get("currency_name", "").strip()
+
+        # Определяем, нужно ли вставлять стрелку
+        if sender and receiver and sender != receiver:
+            from_to = f"{sender} -> {receiver}"
+        else:
+            from_to = receiver  # только получатель, например, при открытии вклада
+
+        block = f"{date} {description}\n{from_to}\nСумма: {amount} {currency}.\n"
+        result.append(block)
+
+    return "\n".join(result)
+
 
 if __name__ == '__main__':
 
@@ -292,5 +314,8 @@ if __name__ == '__main__':
       f_state_date_currency_tab = f_state_date_transac_tab
   if input_descr():
       f_state_date_currency_descr_tab = (process_bank_search(f_state_date_currency_tab, input('Введите слово для поиска: \n')))
-      print(f_state_date_currency_descr_tab)
-  print('stop')
+  else:
+      f_state_date_currency_descr_tab = f_state_date_currency_tab1
+      #print(f_state_date_currency_descr_tab)
+  print(f'Всего банковских операций в выборке {len(f_state_date_currency_descr_tab)}\n')
+  print(format_transactions(f_state_date_currency_descr_tab))
