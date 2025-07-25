@@ -1,7 +1,9 @@
 import csv
+from typing import List, Dict, Any
 import pandas as pd
 import json
 import os
+import re
 
 
 def read_json_file(filepath: str) -> list:
@@ -71,6 +73,7 @@ def filter_by_state(list_dict: list[dict], state_in: str = "EXECUTED") -> list[d
     словарей-выборку по полю state"""
     list_dict_filer_state = []
     for account in list_dict:
+        #print(account)
         if account['state'] == state_in:
             list_dict_filer_state.append(account)
     return list_dict_filer_state
@@ -87,6 +90,7 @@ def sort_by_date(list_dict: list[dict], reverse: bool = True) -> list[dict]:
 
 
 def input_choice():
+    '''функция ввода выбора типа файла с защитой от неправильного ввода'''
     inp = input('''Привет! Добро пожаловать в программу работы с банковскими транзакциями.
     Выберите необходимый пункт меню:
       1. Получить информацию о транзакциях из JSON-файла
@@ -112,23 +116,10 @@ def input_choice():
             inp = input()
     return ch
 
-os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-filepath_json = r'data\operations1.json'
-filepath_csv = r'data\transactions.csv'
-filepath_xlsx = r'data\transactions_excel.xlsx'
-
-choice = input_choice()
-print (f"для обработки выбран {choice} файл")
-if choice == 'json':
-    transaction_table = read_json_file(filepath_json)
-elif choice == 'csv':
-    transaction_table = read_transactions_from_csv(filepath_csv)
-elif choice == 'xlsx':
-    transaction_table = read_transactions_from_excel(filepath_xlsx)
-
 def input_state():
-    inp = input('''Введите статус, по которому необходимо выполнить фильтрацию. \n
-    Доступные cтатусы: EXECUTED, CANCELED, PENDING \n''')
+    '''функция ввода выбора статуса операции с защитой от неправильного ввода'''
+    inp = input('''Введите статус, по которому необходимо выполнить фильтрацию.
+      Доступные cтатусы: EXECUTED, CANCELED, PENDING\n''')
     while True:
         if inp.isalpha():
             i = inp.upper()
@@ -148,12 +139,158 @@ def input_state():
             print(f'Статус операции {inp} недоступен, сделайте правильный выбор')
             inp = input()
     return st
-f_state_trans_tab = filter_by_state(transaction_table , input_state())
-print(f_state_trans_tab)
-#     = input('''Введите статус, по которому необходимо выполнить фильтрацию. \n
-# Доступные cтатусы: EXECUTED, CANCELED, PENDING''')
-# f_st = input()
-# if f_st.isalpha():
-#     f_state= f_st.lower()
-# else:
 
+def input_sort_date():
+    '''функция выбора сортировки даты с защитой от неправильного ввода'''
+    st = []
+    inp = input('''Отсортировать операции по дате? Да/Нет \n''')
+    while True:
+        if inp.isalpha():
+            i = inp.lower()
+            if i == 'да':
+                st.append(True)
+                break
+            elif i == 'нет':
+                st.append(False)
+                break
+            else:
+                print(f'Ошибочный ввод, {inp} недоступен, сделайте правильный выбор')
+                inp = input()
+        else:
+            print(f'Ошибочный ввод, {inp} недоступен, сделайте правильный выбор')
+            inp = input()
+    if st[0]:
+       inp = input('''Отсортировать по возрастанию или по убыванию? \n''')
+       while True:
+          inp_l = inp.lower()
+          index_1 = inp_l.find('возрастанию')
+          index_2 = inp_l.find('убыванию')
+          if index_1 != -1:
+                  st.append(False)
+                  break
+          elif index_2 != -1:
+                  st.append(True)
+                  break
+          else:
+                  print(f'Ошибочный ввод, {inp} недоступен, сделайте правильный выбор')
+                  inp = input()
+    return st
+
+
+def input_sort_currency():
+    '''функция выбора сортировки вида валюты с защитой от неправильного ввода'''
+    inp = input('''Выводить только рублевые транзакции? Да/Нет \n''')
+    while True:
+        if inp.isalpha():
+            i = inp.lower()
+            if i == 'да':
+                st = True
+                break
+            elif i == 'нет':
+                st = False
+                break
+            else:
+                print(f'Ошибочный ввод, {inp} недоступен, сделайте правильный выбор')
+                inp = input()
+        else:
+            print(f'Ошибочный ввод, {inp} недоступен, сделайте правильный выбор')
+            inp = input()
+    return st
+
+def input_descr():
+    '''функция выбора фильтрации по описанию с защитой от неправильного ввода'''
+    inp = input('''Отфильтровать список транзакций по определенному слову в описании? Да/Нет \n''')
+    while True:
+        if inp.isalpha():
+            i = inp.lower()
+            if i == 'да':
+                st = True
+                break
+            elif i == 'нет':
+                st = False
+                break
+            else:
+                print(f'Ошибочный ввод, {inp} недоступен, сделайте правильный выбор')
+                inp = input()
+        else:
+            print(f'Ошибочный ввод, {inp} недоступен, сделайте правильный выбор')
+            inp = input()
+    return st
+
+def filter_and_sort_by_currency(transactions: List[Dict], currency_code: str) -> List[Dict]:
+    """
+    Принимает список транзакций и код валюты.
+    Возвращает отсортированный список транзакций, в которых currency_code совпадает.
+    """
+    filtered = [tx for tx in transactions if tx.get('currency_code') == currency_code]
+    sorted_filtered = sorted(filtered, key=lambda tx: tx['currency_code'])
+    return sorted_filtered
+
+def transform_transactions(transactions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    '''функция, которая преобразует список словарей из формата json файла в формат, совместимый с
+       csv b xlsx файлами. С проверкой наличия необходимых ключей и отбросыванием некорректных записей'''
+    transformed = []
+    for tx in transactions:
+        if not isinstance(tx, dict):
+            continue  # Пропускаем не-словарные записи
+
+        required_keys = ['id', 'state', 'date', 'operationAmount', 'description', 'to']
+        if not all(key in tx for key in required_keys):
+            continue  # Пропускаем записи с отсутствующими ключами
+
+        try:
+            transformed_tx = {
+                'id': float(tx['id']),
+                'state': tx['state'],
+                'date': tx['date'].split('.')[0] + 'Z',
+                'amount': float(tx['operationAmount']['amount']),
+                'currency_name': tx['operationAmount']['currency']['name'],
+                'currency_code': tx['operationAmount']['currency']['code'],
+                'from': tx.get('from', ''),
+                'to': tx['to'],
+                'description': tx['description']
+            }
+            transformed.append(transformed_tx)
+        except (KeyError, TypeError, ValueError) as e:
+            print(f"Пропущена запись из-за ошибки: {e}\nЗапись: {tx}")
+            continue
+
+    return transformed
+
+def process_bank_search(data: List[Dict], search: str) -> List[Dict]:
+    """ Возвращает список словарей, где поле 'description' содержит искомую строку (поиск нечувствителен к регистру)."""
+    pattern = re.compile(rf'\b{re.escape(search)}\b', re.IGNORECASE)
+    return [entry for entry in data if pattern.search(entry.get("description", ""))]
+
+
+if __name__ == '__main__':
+
+  os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
+  filepath_json = r'data\operations.json'
+  filepath_csv = r'data\transactions.csv'
+  filepath_xlsx = r'data\transactions_excel.xlsx'
+
+  choice = input_choice()
+  print (f"для обработки выбран {choice} файл")
+  if choice == 'json':
+      transaction_table_json = read_json_file(filepath_json)
+      transaction_table = transform_transactions(transaction_table_json)
+  elif choice == 'csv':
+      transaction_table = read_transactions_from_csv(filepath_csv)
+  elif choice == 'xlsx':
+      transaction_table = read_transactions_from_excel(filepath_xlsx)
+
+  f_state_transac_tab = filter_by_state(transaction_table , input_state())
+  date_param = input_sort_date()
+  if date_param[0]:
+      f_state_date_transac_tab = sort_by_date(f_state_transac_tab, date_param[1])
+  else:
+      f_state_date_transac_tab = f_state_transac_tab
+  if input_sort_currency():
+      f_state_date_currency_tab = (filter_and_sort_by_currency(f_state_date_transac_tab, 'RUB'))
+  else:
+      f_state_date_currency_tab = f_state_date_transac_tab
+  if input_descr():
+      f_state_date_currency_descr_tab = (process_bank_search(f_state_date_currency_tab, input('Введите слово для поиска: \n')))
+      print(f_state_date_currency_descr_tab)
+  print('stop')
