@@ -1,6 +1,3 @@
-import json
-import os
-import sys
 import tempfile
 import unittest
 from unittest.mock import MagicMock, mock_open, patch
@@ -663,7 +660,7 @@ class TestFormatTransactions(unittest.TestCase):
         self.assertEqual(result.strip(), expected_output.strip())
 
 
-class TestMainRun(unittest.TestCase):
+class TestMain(unittest.TestCase):
 
     @patch("main.os.chdir")
     @patch(
@@ -720,7 +717,7 @@ class TestMainRun(unittest.TestCase):
         mock_process.return_value = [{"id": 1}]
         mock_replace.return_value = [{"id": 1}]
 
-        run()
+        main()
 
         mock_print.assert_any_call("для обработки выбран json файл")
         mock_print.assert_any_call("Всего банковских операций в выборке 1\n")
