@@ -2,7 +2,7 @@ import os
 import pytest
 from src_old.decorators import *
 
-LOG_FILE = "test_log.txt"
+LOG_FILE = "_test_log.txt"
 
 @log()
 def add(a, b):

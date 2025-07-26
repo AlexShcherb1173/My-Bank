@@ -297,7 +297,7 @@ def filter_and_sort_by_currency(transactions: List[Dict], currency_code: str) ->
 
 def transform_transactions(transactions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """функция, которая преобразует список словарей из формата json файла в формат, совместимый с
-    csv b xlsx файлами. С проверкой наличия необходимых ключей и отбросыванием некорректных записей"""
+    csv и xlsx файлами. С проверкой наличия необходимых ключей и отбросыванием некорректных записей"""
     transformed = []
     for tx in transactions:
         if not isinstance(tx, dict):
@@ -348,7 +348,6 @@ def format_transactions(transactions: List[Dict]) -> str:
     """функция преобразования списка словарей с транзакциями в читабельный текст"""
     result = []
     for tx in transactions:
-        print(tx)
         date = get_date(tx.get("date", ""))
         description = tx.get("description", "")
         sender = mask_account_card(tx.get("from", ""))
@@ -365,17 +364,17 @@ def format_transactions(transactions: List[Dict]) -> str:
     return "\n".join(result)
 
 
-# -----------------------------------------main code------------------------------------------------------------------
-if __name__ == "__main__":
-    # пути к тестовым файлам
+# ____________________________основной код обернутый в функцию для тестирования---------------------------------------
+def run()-> None:
     os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
+
     filepath_json = r"data\operations.json"
     filepath_csv = r"data\transactions.csv"
     filepath_xlsx = r"data\transactions_excel.xlsx"
 
-    # --------------------------entry format data---------------------------------------------------------------------
     choice = input_choice()
     print(f"для обработки выбран {choice} файл")
+
     if choice == "json":
         transaction_table_json = read_json_file(filepath_json)
         transaction_table = transform_transactions(transaction_table_json)
@@ -384,24 +383,84 @@ if __name__ == "__main__":
     elif choice == "xlsx":
         transaction_table = read_transactions_from_excel(filepath_xlsx)
 
-    # --------------operation block-----------------------------------------------------------------------------------
     f_state_transac_tab = filter_by_state(transaction_table, input_state())
+
     date_param = input_sort_date()
     if date_param[0]:
         f_state_date_transac_tab = sort_by_date(f_state_transac_tab, date_param[1])
     else:
         f_state_date_transac_tab = f_state_transac_tab
+
     if input_sort_currency():
         f_state_date_currency_tab = filter_and_sort_by_currency(f_state_date_transac_tab, "RUB")
     else:
         f_state_date_currency_tab = f_state_date_transac_tab
+
     if input_descr():
         f_state_date_currency_descr_tab = process_bank_search(
             f_state_date_currency_tab, input("Введите слово для поиска: \n")
         )
     else:
         f_state_date_currency_descr_tab = f_state_date_currency_tab
-        # print(f_state_date_currency_descr_tab)
-    print(f"Всего банковских операций в выборке {len(f_state_date_currency_descr_tab)}\n")
+
     f_state_date_currency_descr_tab_clean = replace_nan_with_zero(f_state_date_currency_descr_tab)
+
+    print(f"Всего банковских операций в выборке {len(f_state_date_currency_descr_tab_clean)}\n")
+    print(format_transactions(f_state_date_currency_descr_tab_clean))
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+
+
+#-----------------------------------------main code------------------------------------------------------------------
+if __name__ == "__main__":
+
+    # пути к тестовым файлам
+    os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
+    filepath_json = r"data\operations.json"
+    filepath_csv = r"data\transactions.csv"
+    filepath_xlsx = r"data\transactions_excel.xlsx"
+
+    # --------------------------entry format data---------------------------------------------------------------------
+    # ввод типа файлов данных
+    choice = input_choice()
+    print(f"для обработки выбран {choice} файл")
+
+    # загрузка соответствующего файла в таблицу транзакций
+    if choice == "json":
+        transaction_table_json = read_json_file(filepath_json)
+        transaction_table = transform_transactions(transaction_table_json)  # преобразование формата json в общий
+    elif choice == "csv":
+        transaction_table = read_transactions_from_csv(filepath_csv)
+    elif choice == "xlsx":
+        transaction_table = read_transactions_from_excel(filepath_xlsx)
+
+    # --------------operation block-----------------------------------------------------------------------------------
+    # фильтрация по категории
+    f_state_transac_tab = filter_by_state(transaction_table, input_state())
+
+    # фильтрация по дате по запросу
+    date_param = input_sort_date()
+    if date_param[0]:
+        f_state_date_transac_tab = sort_by_date(f_state_transac_tab, date_param[1])
+    else:
+        f_state_date_transac_tab = f_state_transac_tab
+
+    # фильтрация рублевых транзакций по запросу
+    if input_sort_currency():
+        f_state_date_currency_tab = filter_and_sort_by_currency(f_state_date_transac_tab, "RUB")
+    else:
+        f_state_date_currency_tab = f_state_date_transac_tab
+
+    # фильтрация по описанию по запросу
+    if input_descr():
+        f_state_date_currency_descr_tab = process_bank_search(
+            f_state_date_currency_tab, input("Введите слово для поиска: \n")
+        )
+    else:
+        f_state_date_currency_descr_tab = f_state_date_currency_tab
+    f_state_date_currency_descr_tab_clean = replace_nan_with_zero(f_state_date_currency_descr_tab)
+
+    # вывод результата
+    print(f"Всего банковских операций в выборке {len(f_state_date_currency_descr_tab_clean)}\n")
     print(format_transactions(f_state_date_currency_descr_tab_clean))
