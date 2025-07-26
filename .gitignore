@@ -43,7 +43,7 @@ pip-delete-this-directory.txt
 nosetests.xml
 .hypothesis/
 .pytest_cache/
-cover/
+
 
 # Translations
 *.mo
