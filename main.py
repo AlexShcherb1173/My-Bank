@@ -365,8 +365,8 @@ def format_transactions(transactions: List[Dict]) -> str:
 
 
 # ____________________________основной код обернутый в функцию ----------------------------------------------------
+def main() -> None:
     os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
-
     # пути к тестовым файлам
     filepath_json = r"data\operations.json"
     filepath_csv = r"data\transactions.csv"
