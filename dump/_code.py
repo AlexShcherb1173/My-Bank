@@ -36,7 +36,7 @@ def read_json_file(filepath: str) -> list:
                 return [2]
     except (json.JSONDecodeError, IOError):
         return [3]
-os.chdir(r'C:\Users\alex_\PycharmProjects\My-Bank')
+os.chdir(r'/')
 filepath_json = r'data\operations.json'
 print(read_json_file(filepath_json))
 # === Точка входа для запуска вручную ===

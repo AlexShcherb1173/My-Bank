@@ -80,7 +80,7 @@ def transactions1():
                 "amount": "9824.07",
                 "currency": {
                     "name": "USD",
-                    "code": "USD"}},
+                    "tests": "USD"}},
             "description": "Перевод организации",
             "from": "Счет 75106830613657916952",
             "to": "Счет 11776614605963066702" },
@@ -91,7 +91,7 @@ def transactions1():
                 "amount": "79114.93",
                 "currency": {
                     "name": "USD",
-                    "code": "USD"}},
+                    "tests": "USD"}},
             "description": "Перевод со счета на счет",
             "from": "Счет 19708645243227258542",
             "to": "Счет 75651667383060284188"},
@@ -102,7 +102,7 @@ def transactions1():
                 "amount": "43318.34",
                 "currency": {
                     "name": "руб.",
-                    "code": "RUB"}},
+                    "tests": "RUB"}},
             "description": "Перевод со счета на счет",
             "from": "Счет 44812258784861134719",
             "to": "Счет 74489636417521191160"},
@@ -113,7 +113,7 @@ def transactions1():
                 "amount": "56883.54",
                 "currency": {
                     "name": "USD",
-                    "code": "USD"}},
+                    "tests": "USD"}},
             "description": "Перевод с карты на карту",
             "from": "Visa Classic 6831982476737658",
             "to": "Visa Platinum 8990922113665229"},
@@ -124,7 +124,7 @@ def transactions1():
                 "amount": "67314.70",
                 "currency": {
                     "name": "руб.",
-                    "code": "RUB"}},
+                    "tests": "RUB"}},
             "description": "Перевод организации",
             "from": "Visa Platinum 1246377376343588",
             "to": "Счет 14211924144426031657"}])
@@ -137,7 +137,7 @@ def transactions2():
                 "amount": "79114.93",
                 "currency": {
                     "name": "EUR",
-                    "code": "EUR"}},
+                    "tests": "EUR"}},
             "description": "Перевод со счета на счет",
             "from": "Счет 19708645243227258542",
             "to": "Счет 75651667383060284188"},
@@ -148,7 +148,7 @@ def transactions2():
                 "amount": "43318.34",
                 "currency": {
                     "name": "руб.",
-                    "code": "RUB"}},
+                    "tests": "RUB"}},
             "description": "Перевод со счета на счет",
             "from": "Счет 44812258784861134719",
             "to": "Счет 74489636417521191160"},
@@ -159,7 +159,7 @@ def transactions2():
                 "amount": "56883.54",
                 "currency": {
                     "name": "EUR",
-                    "code": "EUR"}},
+                    "tests": "EUR"}},
             "description": "Перевод с карты на карту",
             "from": "Visa Classic 6831982476737658",
             "to": "Visa Platinum 8990922113665229"},
@@ -170,7 +170,7 @@ def transactions2():
                 "amount": "67314.70",
                 "currency": {
                     "name": "руб.",
-                    "code": "RUB"}},
+                    "tests": "RUB"}},
             "description": "Перевод организации",
             "from": "Visa Platinum 1246377376343588",
             "to": "Счет 14211924144426031657"}])
@@ -184,7 +184,7 @@ def transactions3():
                 "amount": "56883.54",
                 "currency": {
                     "name": "",
-                    "code": ""}},
+                    "tests": ""}},
             "description": "Перевод с карты на карту",
             "from": "Visa Classic 6831982476737658",
             "to": "Visa Platinum 8990922113665229"},
@@ -195,7 +195,7 @@ def transactions3():
                 "amount": "67314.70",
                 "currency": {
                     "name": "",
-                    "code": ""}},
+                    "tests": ""}},
             "description": "Перевод организации",
             "from": "Visa Platinum 1246377376343588",
             "to": "Счет 14211924144426031657"}])
@@ -208,7 +208,7 @@ def transactions4():
                 "amount": "",
                 "currency": {
                     "name": "",
-                    "code": ""}},
+                    "tests": ""}},
             "description": "",
             "from": "",
             "to": ""},
@@ -219,7 +219,7 @@ def transactions4():
                   "amount": "79114.93",
                   "currency": {
                       "name": "USD",
-                      "code": "USD"}},
+                      "tests": "USD"}},
               "description": "Перевод со счета на счет",
               "from": "Счет 19708645243227258542",
               "to": "Счет 75651667383060284188"}])

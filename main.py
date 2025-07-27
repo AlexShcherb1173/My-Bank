@@ -297,7 +297,7 @@ def filter_and_sort_by_currency(transactions: List[Dict], currency_code: str) ->
 
 def transform_transactions(transactions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """функция, которая преобразует список словарей из формата json файла в формат, совместимый с
-    csv и xlsx файлами. С проверкой наличия необходимых ключей и отбросыванием некорректных записей"""
+    csv и xlsx файлами. С проверкой наличия необходимых ключей и отбрасыванием некорректных записей"""
     transformed = []
     for tx in transactions:
         if not isinstance(tx, dict):
@@ -318,6 +318,7 @@ def transform_transactions(transactions: List[Dict[str, Any]]) -> List[Dict[str,
                 "description": tx["description"],
             }
             transformed.append(transformed_tx)
+
         except (KeyError, TypeError, ValueError) as e:
             print(f"Пропущена запись из-за ошибки: {e}\nЗапись: {tx}")
             continue
@@ -420,6 +421,6 @@ def main() -> None:
 # ---------------------------------------------------------------------------------------------------------------------
 
 
-# -----------------------------------------main code------------------------------------------------------------------
+# -----------------------------------------main tests------------------------------------------------------------------
 if __name__ == "__main__":
     main()
