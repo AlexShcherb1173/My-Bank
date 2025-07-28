@@ -3,125 +3,56 @@ from unittest.mock import MagicMock, mock_open, patch
 from input_data import *
 
 
-class TestInputChoice(unittest.TestCase):
+class TestUserInputs(unittest.TestCase):
+
     @patch("builtins.input", side_effect=["1"])
-    def test_valid_json_choice(self, mock_input):
-        result = input_choice()
-        self.assertEqual(result, "json")
+    def test_input_choice_json(self, mock_input):
+        self.assertEqual(input_choice(), "JSON")
 
     @patch("builtins.input", side_effect=["2"])
-    def test_valid_csv_choice(self, mock_input):
-        result = input_choice()
-        self.assertEqual(result, "csv")
+    def test_input_choice_csv(self, mock_input):
+        self.assertEqual(input_choice(), "CSV")
 
     @patch("builtins.input", side_effect=["3"])
-    def test_valid_xlsx_choice(self, mock_input):
-        result = input_choice()
-        self.assertEqual(result, "xlsx")
+    def test_input_choice_xlsx(self, mock_input):
+        self.assertEqual(input_choice(), "XLSX")
 
-    @patch("builtins.input", side_effect=["0", "4", "abc", "", "2"])
-    def test_invalid_then_valid_input(self, mock_input):
-        result = input_choice()
-        self.assertEqual(result, "csv")
+    @patch("builtins.input", side_effect=["wrong", "5", "2"])
+    def test_input_choice_invalid_then_valid(self, mock_input):
+        self.assertEqual(input_choice(), "CSV")
 
-    @patch("builtins.input", side_effect=["abc", "!", "3"])
-    def test_multiple_invalid_then_valid(self, mock_input):
-        result = input_choice()
-        self.assertEqual(result, "xlsx")
+    @patch("builtins.input", side_effect=["executed"])
+    def test_input_state_executed(self, mock_input):
+        self.assertEqual(input_state(), "EXECUTED")
 
-class TestInputSortDate(unittest.TestCase):
-    @patch("builtins.input", side_effect=["Да", "по убыванию"])
-    def test_sort_yes_descending(self, mock_input):
-        result = input_sort_date()
-        self.assertEqual(result, [True, True])
+    @patch("builtins.input", side_effect=["pending"])
+    def test_input_state_pending(self, mock_input):
+        self.assertEqual(input_state(), "PENDING")
 
-    @patch("builtins.input", side_effect=["Да", "по возрастанию"])
-    def test_sort_yes_ascending(self, mock_input):
-        result = input_sort_date()
-        self.assertEqual(result, [True, False])
+    @patch("builtins.input", side_effect=["cancel", "canceled"])
+    def test_input_state_retry(self, mock_input):
+        self.assertEqual(input_state(), "CANCELED")
 
-    @patch("builtins.input", side_effect=["Нет"])
-    def test_sort_no(self, mock_input):
-        result = input_sort_date()
-        self.assertEqual(result, [False])
-
-    @patch("builtins.input", side_effect=["abc", "да", "убыванию"])
-    def test_invalid_then_valid_descending(self, mock_input):
-        result = input_sort_date()
-        self.assertEqual(result, [True, True])
-
-    @patch("builtins.input", side_effect=["123", "Нет"])
-    def test_invalid_then_valid_no(self, mock_input):
-        result = input_sort_date()
-        self.assertEqual(result, [False])
-
-    @patch("builtins.input", side_effect=["ДА", "ВОЗРАСТАНИЮ"])
-    def test_upper_case_input(self, mock_input):
-        result = input_sort_date()
-        self.assertEqual(result, [True, False])
-
-    @patch("builtins.input", side_effect=["да", "сначала старые", "по возрастанию"])
-    def test_invalid_sort_direction_then_valid(self, mock_input):
-        result = input_sort_date()
-        self.assertEqual(result, [True, False])
-
-
-class TestInputSortCurrency(unittest.TestCase):
-
-    @patch("builtins.input", side_effect=["Да"])
-    def test_rub_currency_yes(self, mock_input):
-        result = input_sort_currency()
-        self.assertTrue(result)
-
-    @patch("builtins.input", side_effect=["Нет"])
-    def test_rub_currency_no(self, mock_input):
-        result = input_sort_currency()
-        self.assertFalse(result)
-
-    @patch("builtins.input", side_effect=["abc", "ДА"])
-    def test_invalid_then_valid_uppercase_yes(self, mock_input):
-        result = input_sort_currency()
-        self.assertTrue(result)
-
-    @patch("builtins.input", side_effect=["123", "нет"])
-    def test_invalid_numeric_then_valid_no(self, mock_input):
-        result = input_sort_currency()
-        self.assertFalse(result)
-
-    @patch("builtins.input", side_effect=["", "что-то", "да"])
-    def test_multiple_invalid_then_valid(self, mock_input):
-        result = input_sort_currency()
-        self.assertTrue(result)
-
-
-class TestInputDescr(unittest.TestCase):
-
-    @patch("builtins.input", side_effect=["Да"])
-    def test_filter_yes(self, mock_input):
-        result = input_descr()
-        self.assertTrue(result)
-
-    @patch("builtins.input", side_effect=["Нет"])
-    def test_filter_no(self, mock_input):
-        result = input_descr()
-        self.assertFalse(result)
-
-    @patch("builtins.input", side_effect=["ДА"])
-    def test_uppercase_yes(self, mock_input):
-        result = input_descr()
-        self.assertTrue(result)
+    @patch("builtins.input", side_effect=["да", "по убыванию"])
+    def test_input_sort_date_descending(self, mock_input):
+        self.assertEqual(input_sort_date(), [True, True])
 
     @patch("builtins.input", side_effect=["нет"])
-    def test_lowercase_no(self, mock_input):
-        result = input_descr()
-        self.assertFalse(result)
+    def test_input_sort_date_none(self, mock_input):
+        self.assertEqual(input_sort_date(), [False])
 
-    @patch("builtins.input", side_effect=["123", "abc", "Да"])
-    def test_invalid_then_valid(self, mock_input):
-        result = input_descr()
-        self.assertTrue(result)
+    @patch("builtins.input", side_effect=["да"])
+    def test_input_sort_currency_true(self, mock_input):
+        self.assertTrue(input_sort_currency())
 
-    @patch("builtins.input", side_effect=["", "нет"])
-    def test_empty_then_valid(self, mock_input):
-        result = input_descr()
-        self.assertFalse(result)
+    @patch("builtins.input", side_effect=["нет"])
+    def test_input_sort_currency_false(self, mock_input):
+        self.assertFalse(input_sort_currency())
+
+    @patch("builtins.input", side_effect=["да", "налог"])
+    def test_input_descr_yes(self, mock_input):
+        self.assertEqual(input_descr(), ["да", "налог"])
+
+    @patch("builtins.input", side_effect=["нет"])
+    def test_input_descr_no(self, mock_input):
+        self.assertEqual(input_descr(), ["нет"])

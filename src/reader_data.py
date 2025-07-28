@@ -4,10 +4,15 @@
 import csv
 import json
 import os
-import pandas as pd
-from transform_data import *
+import sys
 
-#--------------------------read_transactions_from_csv--------------------------------------------------------------
+import pandas as pd
+
+sys.path.append(os.path.abspath("src"))
+from transform_data import transform_csv
+
+
+# --------------------------read_transactions_from_csv--------------------------------------------------------------
 def read_transactions_from_csv(file_path: str) -> list[dict]:
     """функция для считывания финансовых операций из CSV.
     Принимает путь к файлу CSV в качестве аргумента.
@@ -20,7 +25,8 @@ def read_transactions_from_csv(file_path: str) -> list[dict]:
             transactions.append(transaction)
     return transactions
 
-#-----------------------------read_transactions_from_excel-----------------------------------------------------------
+
+# -----------------------------read_transactions_from_excel-----------------------------------------------------------
 def read_transactions_from_excel(file_path: str) -> list[dict]:
     """Функция для считывания финансовых операций из Excel.
     Принимает путь к файлу Excel в качестве аргумента.
@@ -29,7 +35,8 @@ def read_transactions_from_excel(file_path: str) -> list[dict]:
     transactions = df.to_dict(orient="records")
     return transactions
 
-#----------------------------read_json_file--------------------------------------------------------------------------
+
+# ----------------------------read_json_file--------------------------------------------------------------------------
 def read_json_file(filepath: str) -> list:
     """Функция принимает на вход путь до JSON-файла и возвращает список словарей с данными о финансовых транзакциях.
     Если файл пустой, содержит не список или не найден, функция возвращает пустой список."""
@@ -44,4 +51,6 @@ def read_json_file(filepath: str) -> list:
                 return []
     except (json.JSONDecodeError, IOError):
         return []
-#---------------------------------------------------------------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------------------------------------------------

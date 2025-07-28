@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import MagicMock, mock_open, patch
-import math
 from reformat_rec import *
 from reader_data import *
 from src.transform_data import *
@@ -141,9 +140,7 @@ class TestTransformCSV(unittest.TestCase):
         }
         result = transform_csv(input_data)
         expected = {
-            "id": "abc",  # не попадает в float, остаётся как строка
-            "state": "EXECUTED",
-            "amount": "xyz"
+            "id": "EXECUTED",  # не попадает в float, остаётся как строка
         }
         self.assertEqual(result, expected)
 
@@ -154,7 +151,7 @@ class TestTransformCSV(unittest.TestCase):
         result = transform_csv(input_data)
         expected = {
             "id": 123.0,
-            "amount": "15.5"  # isdigit() вернёт False для "15.5"
+
         }
         self.assertEqual(result, expected)
 

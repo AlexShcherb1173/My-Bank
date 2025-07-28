@@ -164,27 +164,27 @@ class TestInputChoice(unittest.TestCase):
     @patch("builtins.input", side_effect=["1"])
     def test_valid_json_choice(self, mock_input):
         result = input_choice()
-        self.assertEqual(result, "json")
+        self.assertEqual(result, "JSON")
 
     @patch("builtins.input", side_effect=["2"])
     def test_valid_csv_choice(self, mock_input):
         result = input_choice()
-        self.assertEqual(result, "csv")
+        self.assertEqual(result, "CSV")
 
     @patch("builtins.input", side_effect=["3"])
     def test_valid_xlsx_choice(self, mock_input):
         result = input_choice()
-        self.assertEqual(result, "xlsx")
+        self.assertEqual(result, "XLSX")
 
     @patch("builtins.input", side_effect=["0", "4", "abc", "", "2"])
     def test_invalid_then_valid_input(self, mock_input):
         result = input_choice()
-        self.assertEqual(result, "csv")
+        self.assertEqual(result, "CSV")
 
     @patch("builtins.input", side_effect=["abc", "!", "3"])
     def test_multiple_invalid_then_valid(self, mock_input):
         result = input_choice()
-        self.assertEqual(result, "xlsx")
+        self.assertEqual(result, "XLSX")
 
 class TestInputSortDate(unittest.TestCase):
     @patch("builtins.input", side_effect=["Да", "по убыванию"])

@@ -2,10 +2,16 @@
 # Модуль выполняет различные преобразования данных транзакций
 
 import math
-from reformat_rec import *
+import os
+import sys
+
+sys.path.append(os.path.abspath("src"))
 from typing import Any, Dict, List
 
-#-----------------------------transform_csv-----------------------------------------------------------------------
+from src.reformat_rec import get_date, mask_account_card
+
+
+# -----------------------------transform_csv-----------------------------------------------------------------------
 def transform_csv(input_dict: dict) -> dict:
     """Функция преобразования формата списка словарей из csv в классический вид"""
     # Извлекаем единственный ключ и значение
@@ -25,7 +31,8 @@ def transform_csv(input_dict: dict) -> dict:
     # Создаем словарь из ключей и преобразованных значений
     return dict(zip(keys, transformed_values))
 
-#------------------------------transform_json-----------------------------------------------------------------------
+
+# ------------------------------transform_json-----------------------------------------------------------------------
 def transform_json(transactions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """функция, которая преобразует список словарей из формата json файла в формат, совместимый с
     csv и xlsx файлами. С проверкой наличия необходимых ключей и отбросыванием некорректных записей"""
@@ -54,7 +61,8 @@ def transform_json(transactions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             continue
     return transformed
 
-#-------------------------replace_nan_with_zero--------------------------------------------------------------------
+
+# -------------------------replace_nan_with_zero--------------------------------------------------------------------
 def replace_nan_with_zero(transactions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """функция для замены NaN значений в полях списков словарей транзакций на строку 0 для корректной обработки"""
     cleaned = []
@@ -68,7 +76,8 @@ def replace_nan_with_zero(transactions: List[Dict[str, Any]]) -> List[Dict[str, 
         cleaned.append(new_tx)
     return cleaned
 
-#-----------------------------format_transactions--------------------------------------------------------------------
+
+# -----------------------------format_transactions--------------------------------------------------------------------
 def format_transactions(transactions: List[Dict]) -> str:
     """функция преобразования списка словарей с транзакциями в читабельный текст"""
     result = []
@@ -87,4 +96,6 @@ def format_transactions(transactions: List[Dict]) -> str:
         block = f"{date} {description}\n{from_to}\nСумма: {amount} {currency}.\n"
         result.append(block)
     return "\n".join(result)
-#--------------------------------------------------------------------------------------------------------------------
+
+
+# --------------------------------------------------------------------------------------------------------------------
