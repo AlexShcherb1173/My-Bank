@@ -1,7 +1,8 @@
 import tempfile
 import unittest
 from unittest.mock import MagicMock, mock_open, patch
-from main import *
+from reader_data import *
+from input_data import *
 
 
 
