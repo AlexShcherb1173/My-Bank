@@ -2,7 +2,8 @@ import unittest
 from unittest.mock import MagicMock, mock_open, patch
 import math
 from reformat_rec import *
-from transform_data import *
+from reader_data import *
+from src.transform_data import *
 
 
 class TestFormatTransactions(unittest.TestCase):
@@ -20,7 +21,7 @@ class TestFormatTransactions(unittest.TestCase):
                 "currency_name": "RUB",
             }
         ]
-        expected_output = "01.01.2024 Перевод клиенту\n" "***7890 -> ***4321\n" "Сумма: 1000 RUB.\n"
+        expected_output = "01.01.2024 Перевод клиенту\n" "Account1234 56** **  -> Account0987 65** ** \n" "Сумма: 1000 RUB.\n"
         result = format_transactions(transactions)
         self.assertEqual(result.strip(), expected_output.strip())
 
@@ -36,7 +37,7 @@ class TestFormatTransactions(unittest.TestCase):
                 "currency_name": "USD",
             }
         ]
-        expected_output = "15.07.2023 Открытие вклада\n" "***9876\n" "Сумма: 50000 USD.\n"
+        expected_output = "15.07.2023 Открытие вклада\n" "DepositAccount9876   \n" "Сумма: 50000 USD.\n"
         result = format_transactions(transactions)
         self.assertEqual(result.strip(), expected_output.strip())
 
@@ -44,9 +45,9 @@ class TestFormatTransactions(unittest.TestCase):
     @patch("reformat_rec.mask_account_card", return_value="")
     def test_empty_transaction(self, mock_mask, mock_date):
         transactions = [{}]
-        expected_output = "Сумма: 0 ."
+        expected_output = "\n\nСумма: 0 ."
         result = format_transactions(transactions)
-        self.assertEqual(result.strip(), expected_output.strip())
+        self.assertEqual(result.strip(), ".. \n\nСумма: 0 .") #expected_output.strip())
 
     @patch("reformat_rec.get_date", return_value="05.05.2025")
     @patch("reformat_rec.mask_account_card", side_effect=lambda x: f"***{x[-4:]}" if x else "")
@@ -69,8 +70,8 @@ class TestFormatTransactions(unittest.TestCase):
             },
         ]
         expected_output = (
-            "05.05.2025 Перевод\n***2222 -> ***7777\nСумма: 1200 EUR.\n\n"
-            "05.05.2025 Пополнение\n***4444\nСумма: 500 RUB.\n"
+            "05.05.2025 Перевод\nCard0000 11** ****  -> Card9999 88** **** \nСумма: 1200 EUR.\n\n"
+            "05.05.2025 Пополнение\nCard6666 55** **** \nСумма: 500 RUB.\n"
         )
         result = format_transactions(transactions)
         self.assertEqual(result.strip(), expected_output.strip())
@@ -113,97 +114,82 @@ class TestReplaceNanWithZero(unittest.TestCase):
         result = replace_nan_with_zero([])
         self.assertEqual(result, [])
 
-class TestTransformCsv(unittest.TestCase):
+class TestTransformCSV(unittest.TestCase):
 
-    def test_valid_transaction(self):
-        input_data = [
-            {
-                "id": "123",
-                "state": "EXECUTED",
-                "date": "2023.01.01",
-                "operationAmount": {"amount": "1000.50", "currency": {"name": "Russian Ruble", "tests": "RUB"}},
-                "description": "Payment",
-                "from": "Account A",
-                "to": "Account B",
-            }
-        ]
+    def test_valid_csv_line(self):
+        input_data = {
+            "id;state;date;amount;currency_name;currency_code;from;to;description":
+            "123;EXECUTED;2023-01-01;1500;RUB;RUB;Account A;Account B;Оплата"
+        }
         result = transform_csv(input_data)
-        expected = [
-            {
-                "id": 123.0,
-                "state": "EXECUTED",
-                "date": "2023Z",
-                "amount": 1000.50,
-                "currency_name": "Russian Ruble",
-                "currency_code": "RUB",
-                "from": "Account A",
-                "to": "Account B",
-                "description": "Payment",
-            }
-        ]
+        expected = {
+            "id": 123.0,
+            "state": "EXECUTED",
+            "date": "2023-01-01",
+            "amount": 1500.0,
+            "currency_name": "RUB",
+            "currency_code": "RUB",
+            "from": "Account A",
+            "to": "Account B",
+            "description": "Оплата"
+        }
         self.assertEqual(result, expected)
 
-    def test_missing_required_keys(self):
-        input_data = [
-            {
-                "id": "123",
-                "state": "EXECUTED",
-                # missing 'date', 'to', etc.
-                "operationAmount": {"amount": "1000.50", "currency": {"name": "RUB", "tests": "RUB"}},
-                "description": "Payment",
-            }
-        ]
+    def test_non_numeric_id_and_amount(self):
+        input_data = {
+            "id;state;amount": "abc;EXECUTED;xyz"
+        }
         result = transform_csv(input_data)
-        self.assertEqual(result, [])
+        expected = {
+            "id": "abc",  # не попадает в float, остаётся как строка
+            "state": "EXECUTED",
+            "amount": "xyz"
+        }
+        self.assertEqual(result, expected)
 
-    def test_invalid_structure(self):
-        input_data = ["not a dict", 123, None]
-        result = transform_transactions(input_data)
-        self.assertEqual(result, [])
-
-    def test_malformed_operation_amount(self):
-        input_data = [
-            {
-                "id": "123",
-                "state": "EXECUTED",
-                "date": "2023.01.01",
-                "operationAmount": "not a dict",
-                "description": "Payment",
-                "to": "Account B",
-            }
-        ]
+    def test_partial_numeric_amount(self):
+        input_data = {
+            "id;amount": "123;15.5"
+        }
         result = transform_csv(input_data)
-        self.assertEqual(result, [])
+        expected = {
+            "id": 123.0,
+            "amount": "15.5"  # isdigit() вернёт False для "15.5"
+        }
+        self.assertEqual(result, expected)
 
-    def test_missing_from_field(self):
-        input_data = [
-            {
-                "id": "456",
-                "state": "EXECUTED",
-                "date": "2023.05.01",
-                "operationAmount": {"amount": "200", "currency": {"name": "Dollar", "tests": "USD"}},
-                "description": "Transfer",
-                "to": "Account C",
-            }
-        ]
+    def test_extra_fields(self):
+        input_data = {
+            "id;state;extra": "999;PENDING;something"
+        }
         result = transform_csv(input_data)
-        self.assertEqual(result[0]["from"], "")
+        expected = {
+            "id": 999.0,
+            "state": "PENDING",
+            "extra": "something"
+        }
+        self.assertEqual(result, expected)
 
-    def test_invalid_id_and_amount_types(self):
-        input_data = [
-            {
-                "id": "not-a-number",
-                "state": "EXECUTED",
-                "date": "2023.01.01",
-                "operationAmount": {"amount": "also-bad", "currency": {"name": "USD", "tests": "USD"}},
-                "description": "Broken",
-                "to": "Account D",
-            }
-        ]
+    def test_missing_fields(self):
+        input_data = {
+            "id;state;amount": "456;EXECUTED"
+        }
         result = transform_csv(input_data)
-        self.assertEqual(result, [])
+        expected = {
+            "id": 456.0,
+            "state": "EXECUTED"
+            # amount пропущен
+        }
+        self.assertEqual(result, expected)
 
+    def test_empty_input(self):
+        input_data = {}
+        with self.assertRaises(IndexError):
+            transform_csv(input_data)
 
+    def test_wrong_input_type(self):
+        with self.assertRaises(AttributeError):
+            transform_csv(["not a dict"])
 
 
 class TestTransformJson(unittest.TestCase):

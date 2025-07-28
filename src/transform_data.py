@@ -19,7 +19,6 @@ def transform_csv(input_dict: dict) -> dict:
         if key in ("id", "amount"):
             if value.isdigit():
                 fvalue = float(value)
-                # print(fvalue, type(fvalue))
                 transformed_values.append(fvalue)
         else:
             transformed_values.append(value)
