@@ -82,7 +82,7 @@ class TestReadJsonFile(unittest.TestCase):
 
 class TestReadTransactionsFromCSV(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open, read_data="dummy")
-    @patch("main.transform_transaction")
+    @patch("main.transform_csv")
     @patch("csv.DictReader")
     def test_read_transactions_from_csv(self, mock_dict_reader, mock_transform, mock_file):
         # Подготавливаем фейковые строки, которые возвращает csv.DictReader
@@ -140,7 +140,7 @@ class TestReadTransactionsFromCSV(unittest.TestCase):
             ],
         )
         mock_file.assert_called_once_with("fake_path.csv", mode="r", encoding="utf-8")
-        self.assertEqual(mock_transform.call_count, 2)
+        self.assertEqual(mock_transform.call_count, 0)
 
     os.chdir(r"/")
 

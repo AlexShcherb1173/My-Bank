@@ -24,7 +24,7 @@ class TestMain(unittest.TestCase):
     @patch("main.input_sort_currency", return_value=True)
     @patch("main.input_descr", return_value=True)
     @patch("main.read_json_file")
-    @patch("main.transform_transactions")
+    @patch("main.transform_csv")
     @patch("main.filter_by_state")
     @patch("main.sort_by_date")
     @patch("main.filter_and_sort_by_currency")

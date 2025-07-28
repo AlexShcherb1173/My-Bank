@@ -88,4 +88,4 @@ def format_transactions(transactions: List[Dict]) -> str:
         block = f"{date} {description}\n{from_to}\nСумма: {amount} {currency}.\n"
         result.append(block)
     return "\n".join(result)
-#------------------
+#---------------------------------------------------------------------------------------------------------------------
