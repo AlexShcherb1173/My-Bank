@@ -10,7 +10,7 @@ class TestTransactionConversion(unittest.TestCase):
         transaction = {
             "operationAmount": {
                 "amount": "100",
-                "currency": {"code": "USD"}
+                "currency": {"tests": "USD"}
             }
         }
 
@@ -27,7 +27,7 @@ class TestTransactionConversion(unittest.TestCase):
         transaction = {
             "operationAmount": {
                 "amount": "50",
-                "currency": {"code": "EUR"}
+                "currency": {"tests": "EUR"}
             }
         }
 
@@ -43,7 +43,7 @@ class TestTransactionConversion(unittest.TestCase):
         transaction = {
             "operationAmount": {
                 "amount": "1234.56",
-                "currency": {"code": "RUB"}
+                "currency": {"tests": "RUB"}
             }
         }
         result = get_transaction_amount_rub(transaction)
@@ -53,7 +53,7 @@ class TestTransactionConversion(unittest.TestCase):
         transaction = {
             "operationAmount": {
                 "amount": "abc",
-                "currency": {"code": "USD"}
+                "currency": {"tests": "USD"}
             }
         }
         result = get_transaction_amount_rub(transaction)

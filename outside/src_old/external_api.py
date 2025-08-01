@@ -15,7 +15,7 @@ def get_transaction_amount_rub(transaction: dict) -> Any:
     return: сумма в рублях (float)
     """
     amount_str = transaction.get("operationAmount", {}).get("amount", "0")
-    currency_code = transaction.get("operationAmount", {}).get("currency", {}).get("code", "RUB")
+    currency_code = transaction.get("operationAmount", {}).get("currency", {}).get("tests", "RUB")
 
     try:
         amount = float(amount_str)
