@@ -1,0 +1,4 @@
+multiply start
+multiply ok
+crash start
+crash error: ValueError. Inputs: (5,), {}
