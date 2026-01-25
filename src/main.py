@@ -3,7 +3,7 @@
 
 import os
 import sys
-import pandas as pd
+
 sys.path.append(os.path.abspath("src"))
 from src.input_data import input_choice, input_descr, input_sort_currency, input_sort_date, input_state
 from src.reader_data import read_json_file, read_transactions_from_csv, read_transactions_from_excel
