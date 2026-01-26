@@ -3,6 +3,7 @@
 
 import os
 import sys
+from pathlib import Path
 
 sys.path.append(os.path.abspath("src"))
 from src.input_data import input_choice, input_descr, input_sort_currency, input_sort_date, input_state
@@ -11,9 +12,10 @@ from src.sort_data import filter_and_sort_by_currency, filter_by_state, process_
 from src.transform_data import format_transactions, replace_nan_with_zero, transform_json, transform_csv
 
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 # ____________________________основной код обернутый в функцию ----------------------------------------------------
 def main() -> None:
-    os.chdir(r"C:\Users\alex_\PycharmProjects\My-Bank")
     # пути к тестовым файлам
     filepath_json = r"data\operations.json"
     filepath_csv = r"data\transactions.csv"
